@@ -29,23 +29,6 @@ This document outlines a comprehensive plan for implementing additional Multiver
   2. Format the response to include sender, receiver, value, status, and other transaction properties
   3. Add explorer link to the transaction
 
-### 1.4. GET_LATEST_TRANSACTIONS
-- **Description**: Fetch the latest transactions on the network
-- **Required Parameters**:
-  - `limit` (optional): Number of transactions to fetch (default: 10)
-- **Implementation Steps**:
-  1. Use the MultiversX API endpoint for latest transactions
-  2. Format the response to include transaction hashes, senders, receivers, and values
-  3. Add explorer links to the transactions
-
-### 1.5. GET_LATEST_BLOCKS
-- **Description**: Fetch the latest blocks on the network
-- **Required Parameters**:
-  - `limit` (optional): Number of blocks to fetch (default: 10)
-- **Implementation Steps**:
-  1. Use the MultiversX API endpoint for latest blocks
-  2. Format the response to include block hashes, proposers, size, and transactions count
-  3. Add explorer links to the blocks
 
 ## 2. Token Actions
 
@@ -75,6 +58,15 @@ This document outlines a comprehensive plan for implementing additional Multiver
   1. Use `ApiNetworkProvider.getNonFungibleTokensOfAccount()` to fetch account NFTs
   2. Format the response to include NFT identifiers, names, and metadata
   3. Add explorer links to the NFTs
+
+
+### 2.4. CREATE_NFT
+- **Description**: Create a new NFT
+- **Required Parameters**:
+  - `name`: The name of the NFT
+  - `ticker`: The ticker of the NFT
+  - `supply`: The supply of the NFT
+
 
 ## 3. DeFi Actions
 
@@ -264,9 +256,9 @@ This document outlines a comprehensive plan for implementing additional Multiver
 ## 6. Implementation Priority
 
 1. **High Priority**:
-   - Explorer Actions (GET_ACCOUNT_INFO, GET_NETWORK_STATS)
+   - Explorer Actions (GET_ACCOUNT_INFO, GET_NETWORK_STATS) ✅
    - Token Actions (GET_TOKEN_INFO, GET_ACCOUNT_TOKENS)
-   - Portfolio Actions (GET_PORTFOLIO)
+   - Portfolio Actions (GET_PORTFOLIO) ✅
 
 2. **Medium Priority**:
    - Staking Actions (DELEGATE_STAKE, UNDELEGATE_STAKE, CLAIM_REWARDS)

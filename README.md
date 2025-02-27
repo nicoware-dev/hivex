@@ -331,7 +331,7 @@ Get EGLD price
 
 ### Wallet Operations
 ```
-Show me my MultiversX wallet address
+Show me my MultiversX wallet info
 ```
 ```
 Show my portfolio
@@ -358,12 +358,6 @@ Get info for wallet erd1jpwn5nmjpmph0lu7h50q0a98w34cm9jjt2acaz64mlumd6phc3us360s
 ```
 ```
 Show me network stats
-```
-```
-Show me the latest blocks
-```
-```
-Show me the latest transactions
 ```
 
 

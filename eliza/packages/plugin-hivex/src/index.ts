@@ -6,6 +6,7 @@ import createTokenAction from "./actions/createToken";
 import { multiversxWalletProvider } from "./providers/wallet";
 import walletAction from "./actions/wallet";
 import portfolioAction from "./actions/portfolio";
+import { ExplorerActions } from "./actions/explorer";
 
 // Import other action groups as they are implemented
 // import { ExplorerActions } from "./actions/explorer";
@@ -22,7 +23,7 @@ import portfolioAction from "./actions/portfolio";
  */
 export const hivexPlugin: Plugin = {
   name: "hivex",
-  description: "MultiversX blockchain integration for HiveX",
+  description: "MultiversX blockchain integration for Eliza",
   actions: [
     ...CoinGeckoActions,
     ...DefiLlamaActions,
@@ -30,6 +31,7 @@ export const hivexPlugin: Plugin = {
     createTokenAction,
     walletAction,
     portfolioAction,
+    ...ExplorerActions,
     // Add other action groups as they are implemented
     // ...ExplorerActions,
     // ...StakingActions,
