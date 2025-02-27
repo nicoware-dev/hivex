@@ -1,0 +1,30 @@
+.confirmFee {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 8px;
+
+  .confirmFeeLabel {
+    color: #a3a3a3;
+  }
+
+  .confirmFeeData {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .confirmFeeDataPriceWrapper {
+      display: flex;
+      align-items: center;
+      color: #737373;
+
+      .confirmFeeDataPrice {
+        color: #737373;
+
+        * {
+          opacity: 1 !important;
+        }
+      }
+    }
+  }
+}

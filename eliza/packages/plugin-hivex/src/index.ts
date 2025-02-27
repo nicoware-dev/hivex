@@ -4,9 +4,9 @@ import { DefiLlamaActions } from "./actions/defillama";
 import transferAction from "./actions/transfer";
 import createTokenAction from "./actions/createToken";
 import { multiversxWalletProvider } from "./providers/wallet";
+import walletAction from "./actions/wallet";
 
 // Import other action groups as they are implemented
-// import { WalletActions } from "./actions/wallet";
 // import { ExplorerActions } from "./actions/explorer";
 // import { StakingActions } from "./actions/staking";
 // import { GovernanceActions } from "./actions/governance";
@@ -27,8 +27,8 @@ export const hivexPlugin: Plugin = {
     ...DefiLlamaActions,
     transferAction,
     createTokenAction,
+    walletAction,
     // Add other action groups as they are implemented
-    // ...WalletActions,
     // ...ExplorerActions,
     // ...StakingActions,
     // ...GovernanceActions,

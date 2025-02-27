@@ -55,7 +55,6 @@ export default {
     name: "CREATE_TOKEN",
     similes: ["DEPLOY_TOKEN"],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
-        console.log("Validating config for user:", message.userId);
         await validateMultiversxConfig(runtime);
         return true;
     },

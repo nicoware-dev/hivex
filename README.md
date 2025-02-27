@@ -331,27 +331,12 @@ Get EGLD price
 
 ### Wallet Operations
 ```
-Show me my MultiversX wallet address and EGLD balance
+Show me my MultiversX wallet address
 ```
 ```
 Show my portfolio
 ```
 
-
-
-### Explorer Provider
-```
-Get info for wallet erd1PLACEHOLDER
-```
-```
-Show me network stats
-```
-```
-Show me the latest blocks
-```
-```
-Show me the latest transactions
-```
 
 ### Token Transfers
 ```
@@ -364,6 +349,21 @@ Send 0.01 USDC to erd1jpwn5nmjpmph0lu7h50q0a98w34cm9jjt2acaz64mlumd6phc3us360s7k
 ## Create a new token
 ```
 Create a token named TestToken with ticker TST and supply of 1000000
+```
+
+
+### Explorer Provider
+```
+Get info for wallet erd1jpwn5nmjpmph0lu7h50q0a98w34cm9jjt2acaz64mlumd6phc3us360s7k
+```
+```
+Show me network stats
+```
+```
+Show me the latest blocks
+```
+```
+Show me the latest transactions
 ```
 
 

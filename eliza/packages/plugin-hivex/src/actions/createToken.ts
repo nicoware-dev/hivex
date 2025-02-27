@@ -13,6 +13,7 @@ import {
 } from "@elizaos/core";
 import { initWalletProvider } from "../providers/wallet";
 import { validateMultiversxConfig } from "../enviroment";
+import { z } from "zod";
 
 export interface CreateTokenContent extends Content {
     tokenName: string;
@@ -22,11 +23,15 @@ export interface CreateTokenContent extends Content {
 }
 
 function isCreateTokenContent(
-    runtime: IAgentRuntime,
+    _runtime: IAgentRuntime,
     content: any
 ): content is CreateTokenContent {
-    console.log("Content for create token", content);
-    return content.tokenName && content.tokenTicker && content.amount;
+    console.log("Validating content:", content);
+    return (
+        typeof content.tokenName === "string" &&
+        typeof content.tokenTicker === "string" &&
+        typeof content.amount === "string"
+    );
 }
 
 const createTokenTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
@@ -51,13 +56,25 @@ Given the recent messages, extract the following information about the requested
 
 Respond with a JSON markdown block containing only the extracted values.`;
 
+// Define the schema for create token content
+const createTokenSchema = z.object({
+    tokenName: z.string(),
+    tokenTicker: z.string(),
+    amount: z.string(),
+    decimals: z.string().default("18"),
+});
+
 export default {
     name: "CREATE_TOKEN",
-    similes: ["DEPLOY_TOKEN"],
+    similes: ["DEPLOY_TOKEN", "ISSUE_TOKEN", "MINT_TOKEN"],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
-        console.log("Validating config for user:", message.userId);
-        await validateMultiversxConfig(runtime);
-        return true;
+        try {
+            await validateMultiversxConfig(runtime);
+            return true;
+        } catch (error) {
+            console.error("MultiversX configuration validation failed:", error);
+            return false;
+        }
     },
     description: "Create a new token.",
     handler: async (
@@ -87,15 +104,21 @@ export default {
             runtime,
             context: transferContext,
             modelClass: ModelClass.SMALL,
+            schema: createTokenSchema,
         });
 
+        console.log("Content for create token", content);
+
+        // Get the actual content data
+        const contentData = content.object ? content.object : content;
+
         // Validate transfer content
-        if (!isCreateTokenContent(runtime, content)) {
-            console.error("Invalid content for TRANSFER_TOKEN action.");
+        if (!isCreateTokenContent(runtime, contentData)) {
+            console.error("Invalid content for CREATE_TOKEN action.");
             if (callback) {
                 callback({
-                    text: "Unable to process transfer request. Invalid content provided.",
-                    content: { error: "Invalid transfer content" },
+                    text: "Unable to process token creation request. Invalid content provided.",
+                    content: { error: "Invalid token creation content" },
                 });
             }
             return false;
@@ -107,20 +130,41 @@ export default {
             
             // Initialize wallet provider
             const walletProvider = initWalletProvider(runtime);
+            const network = runtime.getSetting("MVX_NETWORK") || "mainnet";
+            const explorerURL = network === "mainnet" 
+                ? "https://explorer.multiversx.com" 
+                : `https://${network}-explorer.multiversx.com`;
 
-            await walletProvider.createESDT({
-                tokenName: content.tokenName,
-                amount: content.amount,
-                decimals: Number(content.decimals) || 18,
-                tokenTicker: content.tokenTicker,
+            const txHash = await walletProvider.createESDT({
+                tokenName: contentData.tokenName,
+                amount: contentData.amount,
+                decimals: Number(contentData.decimals) || 18,
+                tokenTicker: contentData.tokenTicker,
             });
+            
+            if (callback) {
+                callback({
+                    text: `Successfully created token ${contentData.tokenName} (${contentData.tokenTicker}) with an initial supply of ${contentData.amount} and ${contentData.decimals} decimals.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
+                    content: { 
+                        success: true,
+                        txHash,
+                        explorerUrl: `${explorerURL}/transactions/${txHash}`,
+                        tokenName: contentData.tokenName,
+                        tokenTicker: contentData.tokenTicker,
+                        amount: contentData.amount,
+                        decimals: contentData.decimals
+                    },
+                });
+            }
+            
             return true;
         } catch (error) {
             console.error("Error during creating token:", error);
             if (callback) {
+                const errorMessage = error instanceof Error ? error.message : "Unknown error";
                 callback({
-                    text: `Error creating token: ${error.message}`,
-                    content: { error: error.message },
+                    text: `Error creating token: ${errorMessage}`,
+                    content: { error: errorMessage },
                 });
             }
             return false;
@@ -133,13 +177,13 @@ export default {
                 user: "{{user1}}",
                 content: {
                     text: "Create a token XTREME with ticker XTR and supply of 10000",
-                    action: "CREATE_TOKEN",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Succesfully created token.",
+                    text: "Successfully created token XTREME (XTR) with an initial supply of 10000 and 18 decimals.\n\nTransaction hash: 0x123abc...\nView on explorer: https://explorer.multiversx.com/transactions/0x123abc...",
+                    action: "CREATE_TOKEN",
                 },
             },
         ],
@@ -148,13 +192,13 @@ export default {
                 user: "{{user1}}",
                 content: {
                     text: "Create a token TEST with ticker TST, 18 decimals and supply of 10000",
-                    action: "CREATE_TOKEN",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Succesfully created token.",
+                    text: "Successfully created token TEST (TST) with an initial supply of 10000 and 18 decimals.\n\nTransaction hash: 0x123abc...\nView on explorer: https://explorer.multiversx.com/transactions/0x123abc...",
+                    action: "CREATE_TOKEN",
                 },
             },
         ],

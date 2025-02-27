@@ -13,6 +13,7 @@ import {
 } from "@elizaos/core";
 import { initWalletProvider } from "../providers/wallet";
 import { validateMultiversxConfig } from "../enviroment";
+import { z } from "zod";
 
 export interface TransferContent extends Content {
     tokenAddress: string;
@@ -24,7 +25,7 @@ function isTransferContent(
     _runtime: IAgentRuntime,
     content: any
 ): content is TransferContent {
-    console.log("Content for transfer", content);
+    console.log("Validating content:", content);
     return (
         typeof content.tokenAddress === "string" &&
         typeof content.amount === "string"
@@ -51,6 +52,13 @@ Given the recent messages, extract the following information about the requested
 
 Respond with a JSON markdown block containing only the extracted values.`;
 
+// Define the schema for transfer content
+const transferSchema = z.object({
+    tokenAddress: z.string(),
+    amount: z.string(),
+    tokenIdentifier: z.string().optional(),
+});
+
 export default {
     name: "SEND_TOKEN",
     similes: [
@@ -61,9 +69,13 @@ export default {
         "PAY",
     ],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
-        console.log("Validating config for user:", message.userId);
-        await validateMultiversxConfig(runtime);
-        return true;
+        try {
+            await validateMultiversxConfig(runtime);
+            return true;
+        } catch (error) {
+            console.error("MultiversX configuration validation failed:", error);
+            return false;
+        }
     },
     description: "Transfer tokens from the agent wallet to another address",
     handler: async (
@@ -93,10 +105,16 @@ export default {
             runtime,
             context: transferContext,
             modelClass: ModelClass.SMALL,
+            schema: transferSchema,
         });
 
+        console.log("Content for transfer", content);
+
+        // Get the actual content data
+        const contentData = content.object ? content.object : content;
+
         // Validate transfer content
-        if (!isTransferContent(runtime, content)) {
+        if (!isTransferContent(runtime, contentData)) {
             console.error("Invalid content for TRANSFER_TOKEN action.");
             if (callback) {
                 callback({
@@ -113,23 +131,48 @@ export default {
             
             // Initialize wallet provider
             const walletProvider = initWalletProvider(runtime);
-
+            const network = runtime.getSetting("MVX_NETWORK") || "mainnet";
+            const explorerURL = network === "mainnet" 
+                ? "https://explorer.multiversx.com" 
+                : `https://${network}-explorer.multiversx.com`;
+            
+            let txHash;
+            
             if (
-                content.tokenIdentifier &&
-                content.tokenIdentifier.toLowerCase() !== "egld"
+                contentData.tokenIdentifier &&
+                contentData.tokenIdentifier.toLowerCase() !== "egld"
             ) {
-                await walletProvider.sendESDT({
-                    receiverAddress: content.tokenAddress,
-                    amount: content.amount,
-                    identifier: content.tokenIdentifier,
+                txHash = await walletProvider.sendESDT({
+                    receiverAddress: contentData.tokenAddress,
+                    amount: contentData.amount,
+                    identifier: contentData.tokenIdentifier,
                 });
-                return true;
+            } else {
+                txHash = await walletProvider.sendEGLD({
+                    receiverAddress: contentData.tokenAddress,
+                    amount: contentData.amount,
+                });
             }
-
-            await walletProvider.sendEGLD({
-                receiverAddress: content.tokenAddress,
-                amount: content.amount,
-            });
+            
+            const tokenType = contentData.tokenIdentifier && 
+                contentData.tokenIdentifier.toLowerCase() !== "egld" 
+                ? contentData.tokenIdentifier 
+                : "EGLD";
+                
+            if (callback) {
+                callback({
+                    text: `Successfully sent ${contentData.amount} ${tokenType} to ${contentData.tokenAddress}.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
+                    content: { 
+                        success: true,
+                        txHash,
+                        explorerUrl: `${explorerURL}/transactions/${txHash}`,
+                        amount: contentData.amount,
+                        tokenType,
+                        receiverAddress: contentData.tokenAddress
+                    },
+                });
+            }
+            
             return true;
         } catch (error) {
             console.error("Error during token transfer:", error);
@@ -139,7 +182,7 @@ export default {
                     content: { error: error.message },
                 });
             }
-            return "";
+            return false;
         }
     },
 
@@ -154,7 +197,7 @@ export default {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll send 1 EGLD tokens now...",
+                    text: "I'll send 1 EGLD tokens now...\n\nTransaction hash: 0x123abc...\nView on explorer: https://explorer.multiversx.com/transactions/0x123abc...",
                     action: "SEND_TOKEN",
                 },
             },
@@ -169,7 +212,7 @@ export default {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll send 1 TST-a8b23d tokens now...",
+                    text: "I'll send 1 TST-a8b23d tokens now...\n\nTransaction hash: 0x123abc...\nView on explorer: https://explorer.multiversx.com/transactions/0x123abc...",
                     action: "SEND_TOKEN",
                 },
             },

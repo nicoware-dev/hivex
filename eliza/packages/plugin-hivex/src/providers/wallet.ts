@@ -46,12 +46,8 @@ export class WalletProvider {
      * @param network - Target network (mainnet, devnet, or testnet)
      */
     constructor(privateKey: string, network: string) {
-        if (!privateKey) {
-            throw new Error("MultiversX private key is not set");
-        }
-        
-        if (!network || !MVX_NETWORK_CONFIG[network]) {
-            throw new Error(`Unsupported network: ${network}`);
+        if (!MVX_NETWORK_CONFIG[network]) {
+            throw new Error(`Unsupported network: ${network}`); // Validate network
         }
 
         const networkConfig = MVX_NETWORK_CONFIG[network];
@@ -66,8 +62,6 @@ export class WalletProvider {
         this.apiNetworkProvider = new ApiNetworkProvider(networkConfig.apiURL, {
             clientName: "eliza-mvx",
         });
-        
-        elizaLogger.log(`MultiversX wallet provider initialized for network: ${network}`);
     }
 
     /**
@@ -335,15 +329,25 @@ export const multiversxWalletProvider: Provider = {
         _state?: State
     ): Promise<string | null> {
         try {
-            const walletProvider = initWalletProvider(runtime);
-            const address = walletProvider.getAddress().bech32();
-            const balance = await walletProvider.getBalance();
+            const privateKey = runtime.getSetting("MVX_PRIVATE_KEY");
             const network = runtime.getSetting("MVX_NETWORK") || "mainnet";
             
-            return `MultiversX Wallet Address: ${address}\nBalance: ${balance} EGLD\nNetwork: ${network}`;
+            if (!privateKey) {
+                return "MultiversX wallet is not configured. Please set MVX_PRIVATE_KEY in your .env file.";
+            }
+            
+            const walletProvider = new WalletProvider(privateKey, network);
+            const address = walletProvider.getAddress().bech32();
+            const balance = await walletProvider.getBalance();
+            const explorerURL = network === "mainnet" 
+                ? "https://explorer.multiversx.com" 
+                : `https://${network}-explorer.multiversx.com`;
+            
+            return `MultiversX Wallet Address: ${address}\nBalance: ${balance} EGLD\nNetwork: ${network}\nExplorer: ${explorerURL}/accounts/${address}`;
         } catch (error) {
             console.error("Error in MultiversX wallet provider:", error);
-            return null;
+            const errorMessage = error instanceof Error ? error.message : "Unknown error";
+            return `Error retrieving MultiversX wallet information: ${errorMessage}`;
         }
     },
 };
