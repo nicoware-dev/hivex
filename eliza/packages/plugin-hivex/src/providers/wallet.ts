@@ -148,7 +148,7 @@ export class WalletProvider {
             ); // View Transaction
             return txHash;
         } catch (error) {
-            console.error("Error sending EGLD transaction:", error);
+            elizaLogger.error("Error sending EGLD transaction");
             throw new Error(
                 `Failed to send EGLD: ${error.message || "Unknown error"}`
             );
@@ -221,7 +221,7 @@ export class WalletProvider {
             ); // View Transaction
             return txHash;
         } catch (error) {
-            console.error("Error sending ESDT transaction:", error);
+            elizaLogger.error("Error sending ESDT transaction");
             throw new Error(
                 `Failed to send ESDT: ${error.message || "Unknown error"}`
             );
@@ -292,7 +292,7 @@ export class WalletProvider {
 
             return txHash; // Return the transaction hash
         } catch (error) {
-            console.error("Error creating ESDT:", error);
+            elizaLogger.error("Error creating ESDT");
             throw new Error(
                 `Failed to create ESDT: ${error.message || "Unknown error"}`
             ); // Throw an error if creation fails
@@ -338,14 +338,20 @@ export const multiversxWalletProvider: Provider = {
             
             const walletProvider = new WalletProvider(privateKey, network);
             const address = walletProvider.getAddress().bech32();
-            const balance = await walletProvider.getBalance();
+            const balanceRaw = await walletProvider.getBalance();
+            
+            // Format the balance with proper decimal places (18 decimals for EGLD)
+            const balanceInEGLD = (BigInt(balanceRaw) / BigInt(10**18)).toString();
+            const remainderInWei = (BigInt(balanceRaw) % BigInt(10**18)).toString().padStart(18, '0');
+            const formattedBalance = `${balanceInEGLD}.${remainderInWei.substring(0, 6)}`;
+            
             const explorerURL = network === "mainnet" 
                 ? "https://explorer.multiversx.com" 
                 : `https://${network}-explorer.multiversx.com`;
             
-            return `MultiversX Wallet Address: ${address}\nBalance: ${balance} EGLD\nNetwork: ${network}\nExplorer: ${explorerURL}/accounts/${address}`;
+            return `MultiversX Wallet Address: ${address}\nBalance: ${formattedBalance} EGLD\nNetwork: ${network}\nExplorer: ${explorerURL}/accounts/${address}`;
         } catch (error) {
-            console.error("Error in MultiversX wallet provider:", error);
+            elizaLogger.error("Error in MultiversX wallet provider");
             const errorMessage = error instanceof Error ? error.message : "Unknown error";
             return `Error retrieving MultiversX wallet information: ${errorMessage}`;
         }

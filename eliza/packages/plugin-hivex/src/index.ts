@@ -5,6 +5,7 @@ import transferAction from "./actions/transfer";
 import createTokenAction from "./actions/createToken";
 import { multiversxWalletProvider } from "./providers/wallet";
 import walletAction from "./actions/wallet";
+import portfolioAction from "./actions/portfolio";
 
 // Import other action groups as they are implemented
 // import { ExplorerActions } from "./actions/explorer";
@@ -28,6 +29,7 @@ export const hivexPlugin: Plugin = {
     transferAction,
     createTokenAction,
     walletAction,
+    portfolioAction,
     // Add other action groups as they are implemented
     // ...ExplorerActions,
     // ...StakingActions,

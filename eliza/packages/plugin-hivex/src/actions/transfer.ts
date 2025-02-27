@@ -25,7 +25,6 @@ function isTransferContent(
     _runtime: IAgentRuntime,
     content: any
 ): content is TransferContent {
-    console.log("Validating content:", content);
     return (
         typeof content.tokenAddress === "string" &&
         typeof content.amount === "string"
@@ -56,7 +55,7 @@ Respond with a JSON markdown block containing only the extracted values.`;
 const transferSchema = z.object({
     tokenAddress: z.string(),
     amount: z.string(),
-    tokenIdentifier: z.string().optional(),
+    tokenIdentifier: z.string().optional().nullable(),
 });
 
 export default {
@@ -73,7 +72,7 @@ export default {
             await validateMultiversxConfig(runtime);
             return true;
         } catch (error) {
-            console.error("MultiversX configuration validation failed:", error);
+            elizaLogger.error("MultiversX configuration validation failed");
             return false;
         }
     },
@@ -108,14 +107,12 @@ export default {
             schema: transferSchema,
         });
 
-        console.log("Content for transfer", content);
-
         // Get the actual content data
         const contentData = content.object ? content.object : content;
 
         // Validate transfer content
         if (!isTransferContent(runtime, contentData)) {
-            console.error("Invalid content for TRANSFER_TOKEN action.");
+            elizaLogger.error("Invalid content for TRANSFER_TOKEN action.");
             if (callback) {
                 callback({
                     text: "Unable to process transfer request. Invalid content provided.",
@@ -136,50 +133,51 @@ export default {
                 ? "https://explorer.multiversx.com" 
                 : `https://${network}-explorer.multiversx.com`;
             
-            let txHash;
+            let txHash: string;
             
-            if (
-                contentData.tokenIdentifier &&
-                contentData.tokenIdentifier.toLowerCase() !== "egld"
-            ) {
+            // Handle ESDT token transfer
+            if (contentData.tokenIdentifier && contentData.tokenIdentifier !== "EGLD") {
                 txHash = await walletProvider.sendESDT({
                     receiverAddress: contentData.tokenAddress,
                     amount: contentData.amount,
                     identifier: contentData.tokenIdentifier,
                 });
-            } else {
+            } 
+            // Handle EGLD transfer
+            else {
                 txHash = await walletProvider.sendEGLD({
                     receiverAddress: contentData.tokenAddress,
                     amount: contentData.amount,
                 });
             }
             
-            const tokenType = contentData.tokenIdentifier && 
-                contentData.tokenIdentifier.toLowerCase() !== "egld" 
-                ? contentData.tokenIdentifier 
-                : "EGLD";
-                
+            // Format the amount for display
+            const formattedAmount = contentData.amount;
+            const tokenType = contentData.tokenIdentifier || "EGLD";
+            
+            elizaLogger.log(`Transfer successful: ${formattedAmount} ${tokenType} to ${contentData.tokenAddress}`);
+            
             if (callback) {
                 callback({
-                    text: `Successfully sent ${contentData.amount} ${tokenType} to ${contentData.tokenAddress}.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
+                    text: `Successfully sent ${formattedAmount} ${tokenType} to ${contentData.tokenAddress}.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
                     content: { 
                         success: true,
                         txHash,
                         explorerUrl: `${explorerURL}/transactions/${txHash}`,
-                        amount: contentData.amount,
+                        amount: formattedAmount,
                         tokenType,
                         receiverAddress: contentData.tokenAddress
                     },
                 });
             }
-            
             return true;
         } catch (error) {
-            console.error("Error during token transfer:", error);
+            elizaLogger.error("Error transferring tokens");
             if (callback) {
+                const errorMessage = error instanceof Error ? error.message : "Unknown error";
                 callback({
-                    text: `Error transferring tokens: ${error.message}`,
-                    content: { error: error.message },
+                    text: `Error transferring tokens: ${errorMessage}`,
+                    content: { error: errorMessage },
                 });
             }
             return false;

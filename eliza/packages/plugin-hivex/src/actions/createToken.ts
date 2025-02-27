@@ -26,7 +26,6 @@ function isCreateTokenContent(
     _runtime: IAgentRuntime,
     content: any
 ): content is CreateTokenContent {
-    console.log("Validating content:", content);
     return (
         typeof content.tokenName === "string" &&
         typeof content.tokenTicker === "string" &&
@@ -72,7 +71,7 @@ export default {
             await validateMultiversxConfig(runtime);
             return true;
         } catch (error) {
-            console.error("MultiversX configuration validation failed:", error);
+            elizaLogger.error("MultiversX configuration validation failed");
             return false;
         }
     },
@@ -107,14 +106,12 @@ export default {
             schema: createTokenSchema,
         });
 
-        console.log("Content for create token", content);
-
         // Get the actual content data
         const contentData = content.object ? content.object : content;
 
         // Validate transfer content
         if (!isCreateTokenContent(runtime, contentData)) {
-            console.error("Invalid content for CREATE_TOKEN action.");
+            elizaLogger.error("Invalid content for CREATE_TOKEN action.");
             if (callback) {
                 callback({
                     text: "Unable to process token creation request. Invalid content provided.",
@@ -142,6 +139,8 @@ export default {
                 tokenTicker: contentData.tokenTicker,
             });
             
+            elizaLogger.log(`Token created successfully: ${contentData.tokenName} (${contentData.tokenTicker})`);
+            
             if (callback) {
                 callback({
                     text: `Successfully created token ${contentData.tokenName} (${contentData.tokenTicker}) with an initial supply of ${contentData.amount} and ${contentData.decimals} decimals.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
@@ -156,10 +155,9 @@ export default {
                     },
                 });
             }
-            
             return true;
         } catch (error) {
-            console.error("Error during creating token:", error);
+            elizaLogger.error("Error creating token");
             if (callback) {
                 const errorMessage = error instanceof Error ? error.message : "Unknown error";
                 callback({
