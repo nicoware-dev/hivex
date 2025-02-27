@@ -11,7 +11,7 @@ import {
     composeContext,
     type Action,
 } from "@elizaos/core";
-import { WalletProvider } from "../providers/wallet";
+import { initWalletProvider } from "../providers/wallet";
 import { validateMultiversxConfig } from "../enviroment";
 
 export interface CreateTokenContent extends Content {
@@ -102,10 +102,11 @@ export default {
         }
 
         try {
-            const privateKey = runtime.getSetting("MVX_PRIVATE_KEY");
-            const network = runtime.getSetting("MVX_NETWORK");
-
-            const walletProvider = new WalletProvider(privateKey, network);
+            // Validate MultiversX configuration
+            await validateMultiversxConfig(runtime);
+            
+            // Initialize wallet provider
+            const walletProvider = initWalletProvider(runtime);
 
             await walletProvider.createESDT({
                 tokenName: content.tokenName,

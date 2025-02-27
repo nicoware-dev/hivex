@@ -123,6 +123,7 @@ Learn more about our agent system in the [agents documentation](docs/agents.md).
 - 💹 DeFi protocol analytics via DefiLlama integration
 - 🔄 Smart Contract interactions using Rust
 - 🧩 ESDT token management (fungible, non-fungible, and semi-fungible tokens)
+- 🔐 MultiversX wallet generator for AI agents
 
 ### 🖥️ Web App Features
 - 🚀 Landing page
@@ -352,14 +353,31 @@ Show me the latest blocks
 Show me the latest transactions
 ```
 
-
-
 ### Token Transfers
 ```
-Send 0.1 EGLD to erd1PLACEHOLDER
+Send 0.001 EGLD to erd1jpwn5nmjpmph0lu7h50q0a98w34cm9jjt2acaz64mlumd6phc3us360s7k
 ```
 ```
-Send 0.01 USDC to erd1PLACEHOLDER
+Send 0.01 USDC to erd1jpwn5nmjpmph0lu7h50q0a98w34cm9jjt2acaz64mlumd6phc3us360s7k
+```
+
+## Create a new token
+```
+Create a token named TestToken with ticker TST and supply of 1000000
+```
+
+
+### Wallet Generator
+```bash
+# Generate a new MultiversX wallet for your AI agent
+cd multiversx-wallet
+python3 wallet_generator.py
+
+# Load an existing wallet
+python3 load_wallet.py --file wallet_data/wallet.json
+
+# Sign a transaction
+python3 sign_transaction_example.py wallet_data/wallet.json <receiver_address> <amount>
 ```
 
 
@@ -369,6 +387,8 @@ Send 0.01 USDC to erd1PLACEHOLDER
 
 - Ensure you have sufficient funds for transaction fees.
 - Always double-check addresses and amounts before executing transactions.
+- The MultiversX wallet generator creates wallets that can be used by your AI agents to interact with the MultiversX blockchain. Keep your private keys secure.
+- For more details on the wallet generator, see the [multiversx-wallet/README.md](multiversx-wallet/README.md) file.
 
 
 ### Project Structure
@@ -398,6 +418,11 @@ docs/                                 # Documentation
   ├── whitepaper.md                      # Project whitepaper
   └── resources/                         # Documentation resources
 assets/                               # Branding Assets & Guidelines
+multiversx-wallet/                    # MultiversX wallet generator for AI agents
+  ├── wallet_generator.py                # Generate new MultiversX wallets
+  ├── load_wallet.py                     # Load existing wallets
+  ├── sign_transaction_example.py        # Example for signing transactions
+  └── README.md                          # Wallet generator documentation
 eliza/                                # Eliza project
   ├── packages/
   │   ├── core/                       # Eliza core functionality

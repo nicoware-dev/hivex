@@ -1,4 +1,4 @@
-import { elizaLogger } from "@elizaos/core";
+import { elizaLogger, IAgentRuntime, Memory, Provider, State } from "@elizaos/core";
 import {
     UserSigner,
     Address,
@@ -46,8 +46,12 @@ export class WalletProvider {
      * @param network - Target network (mainnet, devnet, or testnet)
      */
     constructor(privateKey: string, network: string) {
-        if (!MVX_NETWORK_CONFIG[network]) {
-            throw new Error(`Unsupported network: ${network}`); // Validate network
+        if (!privateKey) {
+            throw new Error("MultiversX private key is not set");
+        }
+        
+        if (!network || !MVX_NETWORK_CONFIG[network]) {
+            throw new Error(`Unsupported network: ${network}`);
         }
 
         const networkConfig = MVX_NETWORK_CONFIG[network];
@@ -62,6 +66,8 @@ export class WalletProvider {
         this.apiNetworkProvider = new ApiNetworkProvider(networkConfig.apiURL, {
             clientName: "eliza-mvx",
         });
+        
+        elizaLogger.log(`MultiversX wallet provider initialized for network: ${network}`);
     }
 
     /**
@@ -299,3 +305,45 @@ export class WalletProvider {
         }
     }
 }
+
+/**
+ * Initialize a WalletProvider instance with the MultiversX private key and network from runtime settings
+ * @param runtime - The agent runtime for accessing settings
+ * @returns A WalletProvider instance
+ */
+export const initWalletProvider = (runtime: IAgentRuntime): WalletProvider => {
+    const privateKey = runtime.getSetting("MVX_PRIVATE_KEY");
+    if (!privateKey) {
+        throw new Error("MVX_PRIVATE_KEY is missing");
+    }
+
+    const network = runtime.getSetting("MVX_NETWORK") || "mainnet";
+    if (!MVX_NETWORK_CONFIG[network]) {
+        throw new Error(`Unsupported network: ${network}`);
+    }
+
+    return new WalletProvider(privateKey, network);
+};
+
+/**
+ * Provider that returns MultiversX wallet information
+ */
+export const multiversxWalletProvider: Provider = {
+    async get(
+        runtime: IAgentRuntime,
+        _message: Memory,
+        _state?: State
+    ): Promise<string | null> {
+        try {
+            const walletProvider = initWalletProvider(runtime);
+            const address = walletProvider.getAddress().bech32();
+            const balance = await walletProvider.getBalance();
+            const network = runtime.getSetting("MVX_NETWORK") || "mainnet";
+            
+            return `MultiversX Wallet Address: ${address}\nBalance: ${balance} EGLD\nNetwork: ${network}`;
+        } catch (error) {
+            console.error("Error in MultiversX wallet provider:", error);
+            return null;
+        }
+    },
+};

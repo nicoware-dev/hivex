@@ -1,6 +1,9 @@
 import { Plugin } from "@elizaos/core";
 import { CoinGeckoActions } from "./actions/coingecko";
 import { DefiLlamaActions } from "./actions/defillama";
+import transferAction from "./actions/transfer";
+import createTokenAction from "./actions/createToken";
+import { multiversxWalletProvider } from "./providers/wallet";
 
 // Import other action groups as they are implemented
 // import { WalletActions } from "./actions/wallet";
@@ -22,6 +25,8 @@ export const hivexPlugin: Plugin = {
   actions: [
     ...CoinGeckoActions,
     ...DefiLlamaActions,
+    transferAction,
+    createTokenAction,
     // Add other action groups as they are implemented
     // ...WalletActions,
     // ...ExplorerActions,
@@ -29,6 +34,9 @@ export const hivexPlugin: Plugin = {
     // ...GovernanceActions,
     // ...TokenActions,
     // ...NFTActions,
+  ],
+  providers: [
+    multiversxWalletProvider
   ],
 };
 
