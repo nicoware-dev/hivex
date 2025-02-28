@@ -1396,6 +1396,9 @@ importers:
 
   packages/plugin-hivex:
     dependencies:
+      '@ashswap/ash-sdk-js':
+        specifier: ^2.2.0
+        version: 2.2.0(axios@1.7.9)(bignumber.js@9.1.2)(protobufjs@7.4.0)
       '@elizaos/adapter-sqlite':
         specifier: workspace:*
         version: link:../adapter-sqlite
@@ -1405,6 +1408,9 @@ importers:
       '@multiversx/sdk-core':
         specifier: 13.15.0
         version: 13.15.0(bignumber.js@9.1.2)(protobufjs@7.4.0)
+      '@multiversx/sdk-network-providers':
+        specifier: ^2.9.3
+        version: 2.9.3(axios@1.7.9)
       axios:
         specifier: ^1.6.2
         version: 1.7.9(debug@4.4.0)
@@ -2611,6 +2617,9 @@ packages:
 
   '@asamuzakjp/css-color@2.8.3':
     resolution: {integrity: sha512-GIc76d9UI1hCvOATjZPyHFmE5qhRccp3/zGfMPapK3jBi+yocEzp6BBB0UnfRYP9NP4FANqUZYb0hnfs3TM3hw==}
+
+  '@ashswap/ash-sdk-js@2.2.0':
+    resolution: {integrity: sha512-bXgwnm545HdhwPEL1Le1XxeiR7Wiz1b52fCVnkAQODo8zhcPUIjll0otacBsb/OG1EYIpzHnVWxHrFQYnUmU3A==}
 
   '@aws-crypto/crc32@5.2.0':
     resolution: {integrity: sha512-nLbCWqQNgUiwwtFsen1AdzAtvuLRsQS8rYgMuxCrdKf9kOssamGLuPwyTY9wyYblNr9+1XM8v6zoDTPPSIeANg==}
@@ -5859,6 +5868,11 @@ packages:
     peerDependencies:
       bignumber.js: ^9.0.1
       protobufjs: ^7.2.6
+
+  '@multiversx/sdk-network-providers@2.9.3':
+    resolution: {integrity: sha512-oBrXbNaaHQymd8EqUQPW0bpZu9JaTz6TOaV8MzNCzUo0Xe3a2QxaQ7f0I5OYzD7k0TxPqLv4hQhfIsh3+ifmPw==}
+    peerDependencies:
+      axios: ^1.7.4
 
   '@multiversx/sdk-transaction-decoder@1.0.2':
     resolution: {integrity: sha512-j43QsKquu8N51WLmVlJ7dV2P3A1448R7/ktvl8r3i6wRMpfdtzDPNofTdHmMRT7DdQdvs4+RNgz8hVKL11Etsw==}
@@ -10153,6 +10167,9 @@ packages:
   bigint-buffer@1.1.5:
     resolution: {integrity: sha512-trfYco6AoZ+rKhKnxA0hgX0HAbVP/s808/EuDSe2JDzUnCp/xAsli35Orvk67UrTEcwuxZqYZDmfA2RXJgxVvA==}
     engines: {node: '>= 10.0.0'}
+
+  bignumber.js@9.0.1:
+    resolution: {integrity: sha512-IdZR9mh6ahOBv/hYGiXyVuyCetmGJhtYkqLBpTStdhEGjegpPlUawydyaF3pbIOFynJTpllEs+NP+CS9jKFLjA==}
 
   bignumber.js@9.1.2:
     resolution: {integrity: sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==}
@@ -14709,6 +14726,9 @@ packages:
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
+
+  lodash.chunk@4.2.0:
+    resolution: {integrity: sha512-ZzydJKfUHJwHa+hF5X66zLFCBrWn5GeF28OHEr4WVWtNDXlQ/IjWKPBiikqKo2ne0+v6JgCgJ0GzJp8k8bHC7w==}
 
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
@@ -21308,6 +21328,17 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.3
       lru-cache: 10.4.3
 
+  '@ashswap/ash-sdk-js@2.2.0(axios@1.7.9)(bignumber.js@9.1.2)(protobufjs@7.4.0)':
+    dependencies:
+      '@multiversx/sdk-core': 13.15.0(bignumber.js@9.1.2)(protobufjs@7.4.0)
+      '@multiversx/sdk-network-providers': 2.9.3(axios@1.7.9)
+      lodash.chunk: 4.2.0
+    transitivePeerDependencies:
+      - axios
+      - bignumber.js
+      - debug
+      - protobufjs
+
   '@aws-crypto/crc32@5.2.0':
     dependencies:
       '@aws-crypto/util': 5.2.0
@@ -26718,6 +26749,14 @@ snapshots:
       bip39: 3.1.0
     transitivePeerDependencies:
       - debug
+
+  '@multiversx/sdk-network-providers@2.9.3(axios@1.7.9)':
+    dependencies:
+      axios: 1.7.9(debug@4.4.0)
+      bech32: 1.1.4
+      bignumber.js: 9.0.1
+      buffer: 6.0.3
+      json-bigint: 1.0.0
 
   '@multiversx/sdk-transaction-decoder@1.0.2':
     dependencies:
@@ -32716,6 +32755,8 @@ snapshots:
   bigint-buffer@1.1.5:
     dependencies:
       bindings: 1.5.0
+
+  bignumber.js@9.0.1: {}
 
   bignumber.js@9.1.2: {}
 
@@ -39032,6 +39073,8 @@ snapshots:
   lodash-es@4.17.21: {}
 
   lodash.camelcase@4.3.0: {}
+
+  lodash.chunk@4.2.0: {}
 
   lodash.debounce@4.0.8: {}
 

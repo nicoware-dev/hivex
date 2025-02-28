@@ -1,0 +1,521 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.69.0-nightly",
+            "commitHash": "dc1d9d50fba2f6a1ccab8748a0050cde38253f60",
+            "commitDate": "2023-01-31",
+            "channel": "Nightly",
+            "short": "rustc 1.69.0-nightly (dc1d9d50f 2023-01-31)"
+        },
+        "contractCrate": {
+            "name": "farm",
+            "version": "0.0.0",
+            "git_version": "da57eb6"
+        },
+        "framework": {
+            "name": "elrond-wasm",
+            "version": "0.33.1"
+        }
+    },
+    "name": "Farm",
+    "constructor": {
+        "inputs": [
+            {
+                "name": "reward_token_id",
+                "type": "TokenIdentifier"
+            },
+            {
+                "name": "farming_token_id",
+                "type": "TokenIdentifier"
+            },
+            {
+                "name": "division_safety_constant",
+                "type": "BigUint"
+            },
+            {
+                "name": "voting_escrow_address",
+                "type": "Address"
+            },
+            {
+                "name": "rewarder_address",
+                "type": "Address"
+            },
+            {
+                "name": "farm_controller_address",
+                "type": "Address"
+            }
+        ],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "enterFarm",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "self_boost",
+                    "type": "bool"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "List<EsdtTokenPayment>"
+                }
+            ]
+        },
+        {
+            "name": "exitFarm",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "List<EsdtTokenPayment>"
+                }
+            ]
+        },
+        {
+            "name": "claimRewards",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "self_boost",
+                    "type": "bool"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "List<EsdtTokenPayment>"
+                }
+            ]
+        },
+        {
+            "name": "calculateRewardsForGivenPosition",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "amount",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "attributes",
+                    "type": "FarmTokenAttributes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "checkpointFarmRewards",
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "startProduceRewards",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "endProduceRewards",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "pause",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "resume",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "getMaxTokenToProcess",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "setMaxTokenToProcess",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "value",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getFarmTokenSupply",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getState",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "State"
+                }
+            ]
+        },
+        {
+            "name": "getFarmTokenId",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "TokenIdentifier"
+                }
+            ]
+        },
+        {
+            "name": "setFarmTokenId",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token_id",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getFarmingTokenId",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "TokenIdentifier"
+                }
+            ]
+        },
+        {
+            "name": "getRewardTokenId",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "TokenIdentifier"
+                }
+            ]
+        },
+        {
+            "name": "getRewardPerSec",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getProduceRewardEnabled",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "getLastRewardBlockTs",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "getDivisionSafetyConstant",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getRewardPerShare",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getRewardReserve",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getSlopeBoosted",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "booster",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getRewarderAddress",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "Address"
+                }
+            ]
+        },
+        {
+            "name": "getVotingEscrowAddress",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "Address"
+                }
+            ]
+        },
+        {
+            "name": "getFarmControllerAddress",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "Address"
+                }
+            ]
+        },
+        {
+            "name": "getAdditionalRewards",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "token",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "FarmAdditionalRewards"
+                }
+            ]
+        },
+        {
+            "name": "setAdditionalRewards",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "reward_per_sec",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "period_reward_end",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        }
+    ],
+    "events": [
+        {
+            "identifier": "interact_farm_event",
+            "inputs": [
+                {
+                    "name": "caller",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "timestamp",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "interact_farm_event",
+                    "type": "InteractFarmEvent"
+                }
+            ]
+        }
+    ],
+    "hasCallback": false,
+    "types": {
+        "KeyValue": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "key",
+                    "type": "Address"
+                },
+                {
+                    "name": "value",
+                    "type": "BigUint"
+                }
+            ]
+        },
+        "RewardTokens": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "token",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "reward_per_share",
+                    "type": "BigUint"
+                }
+            ]
+        },
+        "EsdtTokenPayment": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "token_nonce",
+                    "type": "u64"
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint"
+                }
+            ]
+        },
+        "FarmAdditionalRewards": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "reward_per_sec",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "reward_per_share",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "period_reward_end",
+                    "type": "u64"
+                }
+            ]
+        },
+        "FarmTokenAttributes": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "reward_per_share",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "slope_used",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "booster",
+                    "type": "Address"
+                },
+                {
+                    "name": "initial_farm_amount",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "initial_farming_amount",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "reward_tokens",
+                    "type": "List<RewardTokens>"
+                }
+            ]
+        },
+        "InteractFarmEvent": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "farm_supply",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "reward_reserve",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "slope_boosted",
+                    "type": "List<KeyValue>"
+                }
+            ]
+        },
+        "State": {
+            "type": "enum",
+            "variants": [
+                {
+                    "name": "Inactive",
+                    "discriminant": 0
+                },
+                {
+                    "name": "Active",
+                    "discriminant": 1
+                }
+            ]
+        }
+    }
+}
