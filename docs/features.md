@@ -46,7 +46,7 @@ Let's walk through all the awesome things HiveX can do. We've packed it with fea
 
 - **Token Operations** 💸  
   - Send EGLD tokens and other ESDT tokens
-  - Swap tokens on xExchange
+  - Swap tokens on AshSwap & xExchange
   - Track all your transactions
 
 - **DeFi Operations** 💰  

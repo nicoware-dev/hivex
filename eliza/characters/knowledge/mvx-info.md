@@ -29,6 +29,15 @@ EGLD has a maximum theoretical supply of 31,415,926 tokens, with an innovative m
 
 MultiversX Standard Digital Token (ESDT) is the token standard on MultiversX. Unlike Ethereum's ERC-20 which requires smart contracts, ESDT tokens are managed directly by the protocol, making them more efficient and cost-effective. Learn more at [ESDT Documentation](https://docs.multiversx.com/tokens/esdt-tokens).
 
+## AshSwap
+
+AshSwap is a decentralized exchange (DEX) on MultiversX, allowing users to:
+- Swap tokens
+- Provide liquidity
+- Participate in yield farming
+
+For more information, visit [AshSwap Documentation](https://docs.ashswap.xyz/).
+
 ## xExchange
 
 xExchange is the main decentralized exchange (DEX) on MultiversX, allowing users to:

@@ -115,14 +115,11 @@ Learn more about our agent system in the [agents documentation](docs/agents.md).
 - 💰 Wallet management and balance tracking
 - 💸 Token transfers (EGLD and ESDT tokens on MultiversX)
 - 🔍 Transaction and block explorer functionality
-- 🏦 Staking operations and validator information
-- 🗳️ Governance proposal tracking and participation
-- 📊 Exchange operations and market data
+- 📊 Swap operations on AshSwap & xExchange
+- 💵 Lending & Borrowing on Hatom
 - 📈 Real-time price tracking via CoinGecko integration
 - 🌐 Network statistics and blockchain metrics
 - 💹 DeFi protocol analytics via DefiLlama integration
-- 🔄 Smart Contract interactions using Rust
-- 🧩 ESDT token management (fungible, non-fungible, and semi-fungible tokens)
 - 🔐 MultiversX wallet generator for AI agents
 
 ### 🖥️ Web App Features
@@ -364,15 +361,6 @@ Show me network stats
 
 ```
 Swap 0.001 EGLD for USDC on AshSwap
-```
-```
-Swap 0.01 USDC for EGLD on AshSwap
-```
-```
-Swap 0.001 EGLD for USDC on xExchange
-```
-```
-Swap 0.01 USDC for EGLD on xExchange
 ```
 
 

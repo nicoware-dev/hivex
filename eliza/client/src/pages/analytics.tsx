@@ -65,7 +65,6 @@ const tvlData = [
 const protocolData = [
     { id: 'xexchange', name: 'xExchange', value: 96.73 },
     { id: 'hatom', name: 'Hatom', value: 89.34 },
-    { id: 'multiversx-staking', name: 'MultiversX Staking', value: 78.68 },
     { id: 'ashswap', name: 'AshSwap', value: 70.48 }
 ];
 

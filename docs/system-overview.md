@@ -88,7 +88,7 @@ graph TD
 - **Backend**: Node.js, Express
 - **AI**: OpenAI API, Retrieval-Augmented Generation (RAG)
 - **Orchestration**: n8n, ElizaOS
-- **Blockchain**: MultiversX SDK, xExchange SDK
+- **Blockchain**: MultiversX SDK, xExchange SDK, AshSwap SDK
 - **Data**: CoinGecko API, DefiLlama API, MultiversX API
 
 ## Security Considerations

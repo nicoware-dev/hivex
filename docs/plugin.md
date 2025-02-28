@@ -24,7 +24,7 @@ The ElizaOS Plugin for MultiversX is the bridge that connects your HiveX agents 
   - Smart contract information
 
 - **DeFi Operations:**
-  - Token swaps on xExchange
+  - Token swaps on AshSwap & xExchange
   - Lending and borrowing via Hatom Protocol
   - Liquidity provision
   - Yield farming (coming soon)

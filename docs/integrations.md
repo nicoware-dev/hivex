@@ -4,7 +4,7 @@ Let's explore how HiveX connects with key protocols and data providers in the Mu
 
 ## Active Integrations ✅
 
-### xExchange
+### AshSwap & xExchange
 - **Status**: Active ✅
 - **Features**:
   - Token swaps
@@ -13,30 +13,12 @@ Let's explore how HiveX connects with key protocols and data providers in the Mu
   - Gas optimization
   - Slippage management
 
-### MultiversX Staking
-- **Status**: Active ✅
-- **Features**:
-  - Validator selection
-  - Staking operations
-  - Reward tracking
-  - Position management
-  - Withdrawal handling
-
-### MultiversX Governance
-- **Status**: Active ✅
-- **Features**:
-  - Proposal viewing
-  - Voting functionality
-  - Governance analytics
-  - Transaction tracking
-
-### Hatom Protocol
+### Hatom
 - **Status**: Active ✅
 - **Features**:
   - Lending and borrowing
-  - Liquid staking
-  - Interest rate monitoring
   - Position management
+  
 
 ## Data Providers
 
@@ -56,13 +38,6 @@ Let's explore how HiveX connects with key protocols and data providers in the Mu
   - Performance metrics
   - Cross-protocol comparisons
 
-### GeckoTerminal Integration
-- **Status**: Active ✅
-- **Features**:
-  - Pool data tracking
-  - Volume analytics
-  - Liquidity monitoring
-  - Market trends
 
 ## Core Features
 

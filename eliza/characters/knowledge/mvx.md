@@ -10,7 +10,7 @@ MultiversX uses ESDT (MultiversX Standard Digital Token) for creating and managi
 
 The MultiversX wallet ecosystem includes xPortal (mobile wallet), DeFi Wallet (browser extension), and Maiar, providing users with multiple options for managing their assets and interacting with the blockchain.
 
-xExchange is the main decentralized exchange (DEX) on MultiversX, allowing users to swap tokens, provide liquidity, and participate in yield farming. It functions similarly to Uniswap on Ethereum, using automated market makers (AMMs) to facilitate trades.
+AshSwap and xExchange are the main decentralized exchanges (DEX) on MultiversX, allowing users to swap tokens, provide liquidity, and participate in yield farming. They function similarly to Uniswap on Ethereum, using automated market makers (AMMs) to facilitate trades.
 
 Hatom Protocol is a lending and borrowing platform on MultiversX, enabling users to earn interest by lending their assets or borrow against their collateral. It's similar to Aave or Compound on Ethereum.
 

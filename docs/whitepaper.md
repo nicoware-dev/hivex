@@ -20,6 +20,7 @@ The MultiversX ecosystem includes:
 - Native EGLD token
 - ESDT (MultiversX Standard Digital Token) framework
 - xExchange DEX
+- AshSwap DEX
 - Hatom lending protocol
 - Staking and delegation services
 - NFT marketplace
@@ -93,7 +94,7 @@ HiveX allows users to interact with DeFi protocols using natural language comman
 
 #### 3.3 DeFi Operations
 
-- Token swaps on xExchange
+- Token swaps on AshSwap & xExchange
 - Liquidity provision and management
 - Staking and delegation
 - Lending and borrowing via Hatom
@@ -127,7 +128,9 @@ HiveX allows users to interact with DeFi protocols using natural language comman
 #### 4.2 Blockchain Integration
 
 - MultiversX SDK for blockchain interaction
-- xExchange SDK for DEX operations
+- AshSwap for DEX operations
+- xExchange for DEX operations
+- Hatom for lending operations
 - Secure transaction signing
 - Smart contract interaction
 
@@ -206,6 +209,7 @@ HiveX represents a significant step forward in making DeFi accessible to mainstr
 1. MultiversX Whitepaper: [https://multiversx.com/assets/files/multiversx-whitepaper.pdf](https://multiversx.com/assets/files/multiversx-whitepaper.pdf)
 2. xExchange Documentation: [https://docs.xexchange.com/](https://docs.xexchange.com/)
 3. Hatom Protocol: [https://hatom.com/](https://hatom.com/)
-4. MultiversX Developer Documentation: [https://docs.multiversx.com/](https://docs.multiversx.com/)
+4. AshSwap Documentation: [https://docs.ashswap.xyz/](https://docs.ashswap.xyz/)
+5. MultiversX Developer Documentation: [https://docs.multiversx.com/](https://docs.multiversx.com/)
 
 Thanks for taking the time to dive deeper with us. We're excited to have you on this journey as we continue to innovate and push the boundaries of what's possible in DeFi. 
