@@ -1,5 +1,9 @@
 import supplyAction from "./supply";
 import withdrawAction from "./withdraw";
+import borrowAction from "./borrow";
+import repayAction from "./repay";
+import addCollateralAction from "./addCollateral";
+import removeCollateralAction from "./removeCollateral";
 
 /**
  * Hatom lending protocol actions for the MultiversX blockchain
@@ -8,6 +12,10 @@ import withdrawAction from "./withdraw";
 export const HatomActions = [
     supplyAction,
     withdrawAction,
+    borrowAction,
+    repayAction,
+    addCollateralAction,
+    removeCollateralAction,
 ];
 
 export default HatomActions;

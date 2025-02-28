@@ -100,7 +100,7 @@ Example response:
 {{recentMessages}}
 
 Given the recent messages, extract the following information about the requested lending withdrawal operation:
-- Token to withdraw (e.g., EGLD, USDC)
+- Token to withdraw (e.g., EGLD or HEGLD) - Note that you will be redeeming hTokens (like HEGLD) to get back base tokens (like EGLD)
 - Amount to withdraw
 
 Respond with a JSON markdown block containing only the extracted values.`;
@@ -155,7 +155,7 @@ function formatTokenBalance(balance: string, decimals: number): string {
 
 /**
  * Withdraw tokens from the Hatom lending protocol
- * This action allows users to withdraw their supplied tokens from the Hatom lending protocol
+ * This action allows users to redeem their hTokens (like HEGLD) to withdraw the underlying tokens (like EGLD)
  */
 const withdrawAction: Action = {
     name: "WITHDRAW_LENDING",
@@ -247,22 +247,42 @@ const withdrawAction: Action = {
             // Get wallet address
             const address = walletProvider.getAddress();
             
-            // Normalize token identifier
+            // Normalize token identifier and handle both base tokens and hTokens
             let token = contentData.token.toUpperCase();
+            let baseToken = token;
+            let isHTokenSpecified = false;
             
-            // Check if the token is supported
-            if (!networkConfig.markets[token]) {
+            // Check if the user specified an hToken (like HEGLD) instead of a base token (like EGLD)
+            const isHToken = token.startsWith('H') && token.length > 1;
+            if (isHToken) {
+                // Extract the base token by removing the 'H' prefix
+                baseToken = token.substring(1);
+                elizaLogger.info(`User specified hToken ${token}, converting to base token ${baseToken}`);
+                isHTokenSpecified = true;
+            } else {
+                // User specified a base token, check if it's in the format that matches our config
+                const matchingTokens = Object.keys(networkConfig.markets).filter(
+                    marketToken => marketToken.toUpperCase() === token.toUpperCase()
+                );
+                
+                if (matchingTokens.length > 0) {
+                    baseToken = matchingTokens[0]; // Use the correctly cased token from config
+                }
+            }
+            
+            // Check if the base token is supported
+            if (!networkConfig.markets[baseToken]) {
                 if (callback) {
                     callback({
-                        text: `Error: Token ${token} is not supported by Hatom on ${network}. Supported tokens are: ${Object.keys(networkConfig.markets).join(", ")}`,
-                        content: { error: `Unsupported token: ${token}` },
+                        text: `Error: Token ${baseToken} is not supported by Hatom on ${network}. Supported tokens are: ${Object.keys(networkConfig.markets).join(", ")}`,
+                        content: { error: `Unsupported token: ${baseToken}` },
                     });
                 }
                 return false;
             }
             
-            // Get market details
-            const market = networkConfig.markets[token];
+            // Get market details using the base token
+            const market = networkConfig.markets[baseToken];
             
             try {
                 // Get the hToken details
@@ -276,7 +296,8 @@ const withdrawAction: Action = {
                         hTokenId
                     );
                     
-                    const hTokenDecimals = (hTokenInfo as any).decimals || 18;
+                    // Default to 8 decimals for hTokens (HEGLD, HUSDC, etc.)
+                    const hTokenDecimals = 8;
                     elizaLogger.info(`hToken decimals: ${hTokenDecimals}`);
                     
                     // Get the user's actual hToken balance
@@ -291,18 +312,30 @@ const withdrawAction: Action = {
                     const amountValue = parseFloat(contentData.amount);
                     elizaLogger.info(`Requested amount: ${amountValue}`);
                     
-                    // Convert requested EGLD amount to the smallest unit
-                    const requestedEgldInSmallestUnit = denominateAmount({ 
+                    // Convert requested amount to smallest unit based on hToken decimals
+                    const requestedAmountInSmallestUnit = denominateAmount({ 
                         amount: amountValue.toString(), 
-                        decimals: 18  // EGLD always has 18 decimals
+                        decimals: hTokenDecimals
                     });
-                    elizaLogger.info(`Requested EGLD in smallest unit: ${requestedEgldInSmallestUnit}`);
+                    elizaLogger.info(`Requested amount in smallest unit: ${requestedAmountInSmallestUnit}`);
                     
-                    // IMPORTANT: For Hatom, we need to use the actual hToken balance for the withdrawal
-                    // Instead of trying to convert EGLD to HEGLD, we'll use the hToken balance directly
+                    // Format the requested amount for display
+                    const formattedRequestedAmount = formatTokenBalance(requestedAmountInSmallestUnit, hTokenDecimals);
+                    elizaLogger.info(`Formatted requested amount: ${formattedRequestedAmount}`);
                     
-                    // Log the available hToken balance for withdrawal
-                    elizaLogger.info(`Available hToken balance for withdrawal: ${hTokenBalance}`);
+                    // Ensure the requested amount does not exceed the user's balance
+                    if (BigInt(requestedAmountInSmallestUnit) > BigInt(hTokenBalance)) {
+                        if (callback) {
+                            callback({
+                                text: `Error: Requested withdrawal amount exceeds your available balance of ${formattedHTokenBalance} ${hTokenId}.`,
+                                content: { error: "Requested amount exceeds balance" },
+                            });
+                        }
+                        return false;
+                    }
+                    
+                    // Use the requested amount for withdrawal instead of the entire balance
+                    const hTokenBalanceBigInt = BigInt(requestedAmountInSmallestUnit);
                     
                     // Create a transaction for withdrawing tokens using the actual hToken balance
                     // For withdrawal, we need to send hTokens to the market contract with the "redeem" function
@@ -310,7 +343,6 @@ const withdrawAction: Action = {
                     
                     // Format the token amount as a hex string with even number of characters
                     // Convert to BigInt first to ensure proper handling of large numbers
-                    const hTokenBalanceBigInt = BigInt(hTokenBalance);
                     // Convert to hex and remove '0x' prefix if present
                     let hTokenBalanceHex = hTokenBalanceBigInt.toString(16);
                     // Ensure even number of characters by padding with a leading zero if needed
@@ -344,50 +376,30 @@ const withdrawAction: Action = {
                     
                     elizaLogger.info(`Withdraw transaction sent: ${txHash}`);
                     
-                    // Calculate the approximate EGLD equivalent for display purposes
-                    // This is just an estimate based on the hToken balance
-                    const approximateEgldAmount = formattedHTokenBalance;
-                    
+                    // Update the chat response to use the formatted requested amount
                     if (callback) {
                         callback({
-                            text: `Successfully initiated withdrawal of all your available balance from Hatom lending protocol. You are redeeming ${formattedHTokenBalance} ${hTokenId} tokens, which is approximately ${approximateEgldAmount} EGLD.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
+                            text: `Successfully initiated withdrawal of ${formattedRequestedAmount} ${baseToken} from Hatom lending protocol. This action redeems your ${hTokenId} tokens to withdraw the underlying ${baseToken}.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
                             content: { 
                                 success: true,
                                 txHash,
                                 explorerUrl: `${explorerURL}/transactions/${txHash}`,
-                                token,
-                                amount: approximateEgldAmount,
-                                hTokenAmount: formattedHTokenBalance,
-                                hTokenId
+                                token: baseToken,
+                                hTokenId: hTokenId,
+                                amount: formattedRequestedAmount
                             },
                         });
                     }
                     
                     return true;
                 } catch (tokenError) {
-                    elizaLogger.error(`Error fetching hToken info: ${tokenError.message}`);
-                    
-                    // Check if the error is related to the token not being found
-                    const errorMessage = tokenError.message || "";
-                    const isNotFoundError = errorMessage.includes("not found") || 
-                                           errorMessage.includes("aborted") ||
-                                           errorMessage.includes("Request error");
+                    elizaLogger.error(`Error fetching token info: ${tokenError.message}`);
                     
                     if (callback) {
-                        if (isNotFoundError) {
-                            callback({
-                                text: `Error: Could not find ${hTokenId} tokens in your wallet. You need to have these tokens to withdraw ${token} from Hatom.\n\nTo get ${hTokenId} tokens, you first need to supply ${token} to Hatom using the "Supply ${token} to Hatom" action.`,
-                                content: { 
-                                    error: `No ${hTokenId} tokens found`,
-                                    solution: `Supply ${token} to Hatom first to receive ${hTokenId} tokens`
-                                },
-                            });
-                        } else {
-                            callback({
-                                text: `Error fetching token information: ${errorMessage}. Please try again later.`,
-                                content: { error: errorMessage },
-                            });
-                        }
+                        callback({
+                            text: `Error: Could not find ${hTokenId} tokens in your wallet. You need to have ${hTokenId} tokens (received from supplying ${baseToken}) before you can withdraw.`,
+                            content: { error: `No ${hTokenId} tokens found` },
+                        });
                     }
                     return false;
                 }
@@ -425,7 +437,7 @@ const withdrawAction: Action = {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Successfully initiated withdrawal of 0.1 EGLD from Hatom lending protocol. You are redeeming 0.1 HEGLD-d61095 tokens.\n\nTransaction hash: 0x123abc...\nView on explorer: https://explorer.multiversx.com/transactions/0x123abc...",
+                    text: "Successfully initiated withdrawal of 0.1 EGLD from Hatom lending protocol. This action redeems your HEGLD-d61095 tokens to withdraw the underlying EGLD.\n\nTransaction hash: 0x123abc...\nView on explorer: https://explorer.multiversx.com/transactions/0x123abc...",
                     action: "WITHDRAW_LENDING",
                 },
             },
@@ -434,13 +446,13 @@ const withdrawAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Redeem 10 USDC from Hatom",
+                    text: "Redeem 0.1 HEGLD from Hatom",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Successfully initiated withdrawal of 10 USDC from Hatom lending protocol. You are redeeming 10 HUSDC-188be9 tokens.\n\nTransaction hash: 0x123abc...\nView on explorer: https://explorer.multiversx.com/transactions/0x123abc...",
+                    text: "Successfully initiated withdrawal of 0.1 EGLD from Hatom lending protocol. This action redeems your HEGLD-d61095 tokens to withdraw the underlying EGLD.\n\nTransaction hash: 0x123abc...\nView on explorer: https://explorer.multiversx.com/transactions/0x123abc...",
                     action: "WITHDRAW_LENDING",
                 },
             },

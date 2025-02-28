@@ -97,7 +97,7 @@ Example response:
 {{recentMessages}}
 
 Given the recent messages, extract the following information about the requested lending supply operation:
-- Token to supply (e.g., EGLD, USDC)
+- Token to supply (e.g., EGLD, USDC) - You will receive hTokens (like HEGLD) in return
 - Amount to supply
 
 Respond with a JSON markdown block containing only the extracted values.`;
@@ -111,6 +111,7 @@ const supplyLendingSchema = z.object({
 /**
  * Supply tokens to the Hatom lending protocol
  * This action allows users to supply tokens to the Hatom lending protocol and earn interest
+ * Users receive hTokens (like HEGLD) in return, which represent their position
  */
 const supplyAction: Action = {
     name: "SUPPLY_LENDING",
@@ -246,14 +247,60 @@ const supplyAction: Action = {
                 
                 if (token === "EGLD") {
                     // For EGLD, we send EGLD directly to the market contract with the "mint" function
-                    transaction = new Transaction({
-                        value: amountInSmallestUnit,
-                        sender: address,
-                        receiver: marketAddress,
-                        gasLimit: 30000000, // Based on the example transaction
-                        chainID: networkConfig.chainId,
-                        data: Buffer.from("mint"),
-                    });
+                    try {
+                        // Ensure the market address is valid by checking its format
+                        // The Address constructor would have thrown an error if invalid,
+                        // but we'll add an extra check to be safe
+                        if (!market.address || market.address.length === 0) {
+                            throw new Error(`Invalid market address format: ${market.address}`);
+                        }
+                        
+                        // Create the transaction with proper error handling
+                        transaction = new Transaction({
+                            value: amountInSmallestUnit,
+                            sender: address,
+                            receiver: marketAddress,
+                            gasLimit: 30000000, // Based on the example transaction
+                            chainID: networkConfig.chainId,
+                            data: Buffer.from("mint"),
+                        });
+                        
+                        // Get the account nonce
+                        const account = await apiProvider.getAccount(address);
+                        transaction.nonce = BigInt(account.nonce);
+                        
+                        // Sign and send the transaction
+                        const signature = await walletProvider.signTransaction(transaction);
+                        transaction.signature = signature;
+                        const txHash = await apiProvider.sendTransaction(transaction);
+                        
+                        elizaLogger.info(`Supply transaction sent: ${txHash}`);
+                        
+                        if (callback) {
+                            callback({
+                                text: `Successfully initiated supply of ${amountValue} ${token} to Hatom lending protocol. You will receive ${market.tokenId} tokens representing your position.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
+                                content: { 
+                                    success: true,
+                                    txHash,
+                                    explorerUrl: `${explorerURL}/transactions/${txHash}`,
+                                    token,
+                                    amount: amountValue.toString(),
+                                    hTokenId: market.tokenId
+                                },
+                            });
+                        }
+                        
+                        return true;
+                    } catch (txError) {
+                        elizaLogger.error(`Error creating or sending transaction: ${txError.message}`);
+                        if (callback) {
+                            callback({
+                                text: `Error: There was a problem with the transaction. ${txError.message}`,
+                                content: { error: txError.message },
+                            });
+                        }
+                        return false;
+                    }
                 } else {
                     // For other tokens, we would use ESDTTransfer
                     // This would be implemented for other tokens like USDC, USDT, etc.
@@ -265,33 +312,6 @@ const supplyAction: Action = {
                     }
                     return false;
                 }
-                
-                // Get the account nonce
-                const account = await apiProvider.getAccount(address);
-                transaction.nonce = BigInt(account.nonce);
-                
-                // Sign and send the transaction
-                const signature = await walletProvider.signTransaction(transaction);
-                transaction.signature = signature;
-                const txHash = await apiProvider.sendTransaction(transaction);
-                
-                elizaLogger.info(`Supply transaction sent: ${txHash}`);
-                
-                if (callback) {
-                    callback({
-                        text: `Successfully initiated supply of ${amountValue} ${token} to Hatom lending protocol. You will receive ${market.tokenId} tokens representing your position.\n\nTransaction hash: ${txHash}\nView on explorer: ${explorerURL}/transactions/${txHash}`,
-                        content: { 
-                            success: true,
-                            txHash,
-                            explorerUrl: `${explorerURL}/transactions/${txHash}`,
-                            token,
-                            amount: amountValue.toString(),
-                            hTokenId: market.tokenId
-                        },
-                    });
-                }
-                
-                return true;
             } catch (addressError) {
                 elizaLogger.error(`Invalid market address format: ${market.address}. Error: ${addressError.message}`);
                 if (callback) {

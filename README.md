@@ -368,15 +368,26 @@ Swap 0.001 EGLD for USDC
 Swap 0.01 USDC for EGLD
 ```
 
+
+
 ### Lending & Borrowing
 ```
-Supply 0.001 EGLD to Hatom
+Supply 0.01 EGLD to Hatom
 ```
 ```
-Withdraw 0.001 EGLD from Hatom
+Add 0.1 HEGLD as collateral to Hatom
 ```
 ```
-Borrow 0.001 EGLD from Hatom
+Borrow 0.0001 USDC from Hatom
+```
+```
+Repay 0.0001 USDC to Hatom
+```
+```
+Remove 0.001 EGLD as collateral from Hatom
+```
+```
+Redeem 0.1 HEGLD from Hatom
 ```
 
 
