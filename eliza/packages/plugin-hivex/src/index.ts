@@ -7,6 +7,8 @@ import { multiversxWalletProvider } from "./providers/wallet";
 import walletAction from "./actions/wallet";
 import portfolioAction from "./actions/portfolio";
 import { ExplorerActions } from "./actions/explorer";
+import { ExchangeActions } from "./actions/exchange";
+import { HatomActions } from "./actions/hatom";
 
 // Import other action groups as they are implemented
 // import { ExplorerActions } from "./actions/explorer";
@@ -32,6 +34,8 @@ export const hivexPlugin: Plugin = {
     walletAction,
     portfolioAction,
     ...ExplorerActions,
+    ...ExchangeActions,
+    ...HatomActions,
     // Add other action groups as they are implemented
     // ...ExplorerActions,
     // ...StakingActions,

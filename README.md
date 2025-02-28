@@ -360,6 +360,18 @@ Get info for wallet erd1jpwn5nmjpmph0lu7h50q0a98w34cm9jjt2acaz64mlumd6phc3us360s
 Show me network stats
 ```
 
+### Swap Tokens
+```
+Swap 0.001 EGLD for USDC
+```
+```
+Swap 0.01 USDC for EGLD
+```
+
+
+
+
+
 
 ### Wallet Generator
 ```bash
