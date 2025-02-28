@@ -1,4 +1,5 @@
 import supplyAction from "./supply";
+import withdrawAction from "./withdraw";
 
 /**
  * Hatom lending protocol actions for the MultiversX blockchain
@@ -6,6 +7,7 @@ import supplyAction from "./supply";
  */
 export const HatomActions = [
     supplyAction,
+    withdrawAction,
 ];
 
 export default HatomActions;

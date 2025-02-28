@@ -368,6 +368,17 @@ Swap 0.001 EGLD for USDC
 Swap 0.01 USDC for EGLD
 ```
 
+### Lending & Borrowing
+```
+Supply 0.001 EGLD to Hatom
+```
+```
+Withdraw 0.001 EGLD from Hatom
+```
+```
+Borrow 0.001 EGLD from Hatom
+```
+
 
 
 
