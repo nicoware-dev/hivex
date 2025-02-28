@@ -495,7 +495,7 @@ export default {
 } as Action;
 
 /**
- * Create a transaction for swapping EGLD to a token on xExchange
+ * Create a transaction for EGLD to token swap
  * This requires wrapping EGLD to WEGLD first, then swapping WEGLD to the desired token
  */
 async function createEgldToTokenSwapTransaction({
@@ -517,8 +517,6 @@ async function createEgldToTokenSwapTransaction({
     const minAmountOut = calculateMinAmountOut(amount, slippage);
     elizaLogger.info(`Minimum amount out: ${minAmountOut}`);
 
-    // For EGLD to token swap, we need to use the Tasks Composer contract with the composeTasks method
-    
     try {
         // Check if the token is WEGLD, if so, we can just wrap EGLD
         if (toToken === networkConfig.wegldTokenId) {
@@ -537,76 +535,33 @@ async function createEgldToTokenSwapTransaction({
             return transaction;
         }
         
-        // For EGLD to other tokens, we use the composeTasks method
-        // Prepare the token ID with length prefix (4 bytes)
-        const tokenIdBytes = Buffer.from(toToken);
-        elizaLogger.info(`Token ID length: ${tokenIdBytes.length}`);
-        elizaLogger.info(`Token ID hex: ${tokenIdBytes.toString('hex')}`);
-
-        // Format the amount as hex
-        const amountBigInt = BigInt(amount);
-        const amountHex = amountBigInt.toString(16).padStart(16, '0');
-        elizaLogger.info(`Amount hex: ${amountHex}`);
-
-        // Format the minimum amount out as hex
-        const minAmountOutHex = minAmountOut.toString(16).padStart(16, '0');
-        elizaLogger.info(`Min amount out hex: ${minAmountOutHex}`);
-
-        // Create the data string for the composeTasks method
-        // The format needs to be correct for the min_expected_token_out parameter
-        // The correct format is: composeTasks@tokenID@amount@@@number_of_tasks@task_data
-        // Where task_data includes the swap function and parameters
+        // For EGLD to other tokens, we need to use the exact format from the successful transaction
         
-        // Convert token ID to hex with proper length prefix
-        const tokenIdHex = tokenIdBytes.toString('hex');
-        const tokenIdLengthHex = tokenIdBytes.length.toString(16).padStart(2, '0');
+        // Format the destination token ID with proper length prefix
+        const toTokenHex = Buffer.from(toToken).toString('hex');
+        const toTokenLengthHex = toToken.length.toString(16).padStart(8, '0');
         
-        // Create the swap task data
-        // The swapTokensFixedInput function requires:
-        // - token_out (tokenID)
-        // - min_amount_out (BigUint)
-        const swapFunctionName = "swapTokensFixedInput";
-        const swapFunctionNameHex = Buffer.from(swapFunctionName).toString('hex');
-        const swapFunctionNameLengthHex = swapFunctionName.length.toString(16).padStart(2, '0');
+        // Format the minimum amount out as hex with proper padding
+        const minAmountOutHex = minAmountOut.toString(16).padStart(8, '0');
         
-        // Format the task arguments
-        // The correct format for the router is:
-        // swapTokensFixedInput@tokenOut@minAmountOut
-        const wegldTokenId = networkConfig.wegldTokenId;
+        // Create the task data for the swap
+        // This is the exact format from the successful transaction, with our token and amount
+        const taskData = `00000020000000000000000005001f49372ab3b57402e9ad1519a0b0271d5190186654830000001573776170546f6b656e7346697865644f75747075740000000${toTokenLengthHex}${toTokenHex}000000${minAmountOutHex}`;
         
-        // For EGLD to token swap, we need to:
-        // 1. Wrap EGLD to WEGLD
-        // 2. Swap WEGLD to the desired token
-        
-        // If the target token is already WEGLD, we just need to wrap
-        if (toToken === wegldTokenId) {
-            // For wrapping EGLD to WEGLD, we send EGLD directly to the wrapper contract
-            const transaction = new Transaction({
-                value: amount,
-                sender: sender,
-                receiver: new Address(networkConfig.wrapperAddress),
-                gasLimit: 30000000,
-                chainID: networkConfig.chainId,
-                data: Buffer.from("wrapEgld"),
-                nonce: BigInt(account.nonce),
-            });
-            
-            elizaLogger.info(`Created wrap EGLD transaction`);
-            return transaction;
-        }
-        
-        // For EGLD to other tokens, we use the router's swapTokensFixedInput function
-        // The format is: swapTokensFixedInput@tokenOut@minAmountOut
-        const dataString = `composeTasks@${tokenIdLengthHex}${tokenIdHex}@${amountHex}@@@01@${swapFunctionNameLengthHex}${swapFunctionNameHex}@${tokenIdLengthHex}${tokenIdHex}@${minAmountOutHex}`;
+        // Create the full data string using the exact format from the successful transaction
+        // The format from the successful transaction is:
+        // composeTasks@0000000b555344432d6337366631660000000000000000000000022710@@@03@...
+        const amountHex = BigInt(amount).toString(16).padStart(8, '0');
+        const dataString = `composeTasks@0000000${toTokenLengthHex}${toTokenHex}0000000000000000000000${amountHex}@@@01@${taskData}`;
         
         elizaLogger.info(`Transaction data: ${dataString}`);
 
-        // Create the transaction
+        // Create the transaction with the exact gas limit from the successful transaction
         const transaction = new Transaction({
             value: amount,
             sender: sender,
             receiver: new Address(networkConfig.tasksComposerAddress),
-            gasLimit: 180000000, // Increased gas limit based on successful transaction
+            gasLimit: 180200000, // Exact gas limit from successful transaction
             chainID: networkConfig.chainId,
             data: Buffer.from(dataString),
             nonce: BigInt(account.nonce),
@@ -666,22 +621,36 @@ async function createTokenToEgldSwapTransaction({
             return transaction;
         }
         
-        // For other tokens to EGLD, we use swapTokensFixedInputAndUnwrapEgld
-        // Format the token IDs and amounts properly
+        // For other tokens to EGLD, we'll use the composeTasks method with the exact format from the successful transaction
+        // Get the token IDs and format them with proper length prefixes
         const fromTokenHex = Buffer.from(fromToken).toString('hex');
-        const wegldTokenHex = Buffer.from(networkConfig.wegldTokenId).toString('hex');
-        const minAmountOutHex = minAmountOut.toString(16).padStart(16, '0');
+        const fromTokenLengthHex = fromToken.length.toString(16).padStart(8, '0');
+        const wegldTokenId = networkConfig.wegldTokenId;
+        const wegldTokenHex = Buffer.from(wegldTokenId).toString('hex');
+        const wegldTokenLengthHex = wegldTokenId.length.toString(16).padStart(8, '0');
         
-        // Properly format the data string with correct encoding
-        const dataString = `ESDTTransfer@${fromTokenHex}@${amount}@swapTokensFixedInputAndUnwrapEgld@${wegldTokenHex}@${minAmountOutHex}`;
+        // Format the minimum amount out as hex with proper padding
+        const minAmountOutHex = minAmountOut.toString(16).padStart(8, '0');
+        
+        // Create the task data for the swap to WEGLD and then unwrap
+        // This is the exact format from the successful transaction, with our token and amount
+        const taskData1 = `00000020000000000000000005001f49372ab3b57402e9ad1519a0b0271d5190186654830000001573776170546f6b656e7346697865644f75747075740000000${wegldTokenLengthHex}${wegldTokenHex}000000${minAmountOutHex}`;
+        const taskData2 = `0000001c756e77726170457364744e6674546f6b656e@${wegldTokenLengthHex}${wegldTokenHex}`;
+        
+        // Create the full data string using the exact format from the successful transaction
+        // The format from the successful transaction is:
+        // composeTasks@0000000b555344432d6337366631660000000000000000000000022710@@@03@...
+        const amountHex = BigInt(amount).toString(16).padStart(8, '0');
+        const dataString = `composeTasks@0000000${fromTokenLengthHex}${fromTokenHex}0000000000000000000000${amountHex}@@@02@${taskData1}@${taskData2}`;
+        
         elizaLogger.info(`Transaction data: ${dataString}`);
         
-        // Create a new transaction
+        // Create a new transaction with the exact gas limit from the successful transaction
         const transaction = new Transaction({
             value: '0',
             sender: sender,
-            receiver: new Address(networkConfig.routerAddress),
-            gasLimit: 60000000, // High gas limit for swap operations
+            receiver: new Address(networkConfig.tasksComposerAddress),
+            gasLimit: 180200000, // Exact gas limit from successful transaction
             chainID: networkConfig.chainId,
             data: Buffer.from(dataString)
         });
@@ -722,22 +691,33 @@ async function createTokenToTokenSwapTransaction({
         const minAmountOut = calculateMinAmountOut(amount, slippage);
         elizaLogger.info(`Minimum amount out: ${minAmountOut}`);
         
-        // For token to token swap, we use ESDTTransfer to the router
-        // Format the token IDs and amounts properly
+        // For token to token swap, we'll use the composeTasks method with the exact format from the successful transaction
+        // Get the token IDs and format them with proper length prefixes
         const fromTokenHex = Buffer.from(fromToken).toString('hex');
+        const fromTokenLengthHex = fromToken.length.toString(16).padStart(8, '0');
         const toTokenHex = Buffer.from(toToken).toString('hex');
-        const minAmountOutHex = minAmountOut.toString(16).padStart(16, '0');
+        const toTokenLengthHex = toToken.length.toString(16).padStart(8, '0');
         
-        // Properly format the data string with correct encoding
-        const dataString = `ESDTTransfer@${fromTokenHex}@${amount}@swapTokensFixedInput@${toTokenHex}@${minAmountOutHex}`;
+        // Format the minimum amount out as hex with proper padding
+        const minAmountOutHex = minAmountOut.toString(16).padStart(8, '0');
+        
+        // Create the task data for the swap using the exact format from the successful transaction
+        const taskData = `00000020000000000000000005001f49372ab3b57402e9ad1519a0b0271d5190186654830000001573776170546f6b656e7346697865644f75747075740000000${toTokenLengthHex}${toTokenHex}000000${minAmountOutHex}`;
+        
+        // Create the full data string using the exact format from the successful transaction
+        // The format from the successful transaction is:
+        // composeTasks@0000000b555344432d6337366631660000000000000000000000022710@@@03@...
+        const amountHex = BigInt(amount).toString(16).padStart(8, '0');
+        const dataString = `composeTasks@0000000${fromTokenLengthHex}${fromTokenHex}0000000000000000000000${amountHex}@@@01@${taskData}`;
+        
         elizaLogger.info(`Transaction data: ${dataString}`);
         
-        // Create a new transaction
+        // Create a new transaction with the exact gas limit from the successful transaction
         const transaction = new Transaction({
             value: '0',
             sender: sender,
-            receiver: new Address(networkConfig.routerAddress),
-            gasLimit: 60000000, // High gas limit for swap operations
+            receiver: new Address(networkConfig.tasksComposerAddress),
+            gasLimit: 180200000, // Exact gas limit from successful transaction
             chainID: networkConfig.chainId,
             data: Buffer.from(dataString)
         });

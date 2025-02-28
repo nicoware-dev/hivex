@@ -1,4 +1,4 @@
-import swapTokensAction from "./swap";
+import swapTokensAction from "./swapv2";
 
 /**
  * Exchange actions for the MultiversX blockchain

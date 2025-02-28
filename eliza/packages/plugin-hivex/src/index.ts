@@ -7,7 +7,6 @@ import { multiversxWalletProvider } from "./providers/wallet";
 import walletAction from "./actions/wallet";
 import portfolioAction from "./actions/portfolio";
 import { ExplorerActions } from "./actions/explorer";
-import { ExchangeActions } from "./actions/xexchange";
 import { HatomActions } from "./actions/hatom";
 import { swap as ashSwapAction } from "./actions/ashswap";
 
@@ -35,7 +34,6 @@ export const hivexPlugin: Plugin = {
     walletAction,
     portfolioAction,
     ...ExplorerActions,
-    ...ExchangeActions,
     ...HatomActions,
     ashSwapAction, // AshSwap DEX token swap action
     // Add other action groups as they are implemented
