@@ -6,25 +6,25 @@ Here are the essential links to help you connect with the HiveX community, acces
 
 - **Discord:**  
   Join our community for real-time support, discussions, and updates.  
-  [Discord](https://discord.gg/PLACEHOLDER)
+  [Discord](https://discord.gg/bTRhbRFbzc)
 
 - **Twitter (X):**  
   Follow us for announcements, news, and engaging content.  
-  [https://x.com/HiveXAgent](https://x.com/PLACEHOLDER)
+  [https://x.com/HiveXAgent](https://x.com/HiveXagent)
 
 - **YouTube:**  
   Watch our demo videos and tutorials to see HiveX in action.  
-  [https://youtu.be/PLACEHOLDER](https://youtu.be/PLACEHOLDER)
+  [https://youtu.be/NzlK-cFtw7I](https://youtu.be/NzlK-cFtw7I)
 
 - **Linktree:**  
   Access all our links and resources in one convenient place.  
-  [https://linktr.ee/HiveX](https://linktr.ee/PLACEHOLDER)
+  [https://linktr.ee/HiveX_AI](https://linktr.ee/HiveX_AI)
 
 ## Official Website
 
 - **HiveX Web App:**  
   Explore our interactive web interface for managing your DeFAI operations.  
-  [https://hivex.vercel.app/](https://hivex.vercel.app/)
+  [https://hivex-ruby.vercel.app/](https://hivex-ruby.vercel.app/)
 
 ## Additional Resources
 
@@ -34,7 +34,7 @@ Here are the essential links to help you connect with the HiveX community, acces
 
 - **GitHub Repository:**  
   Get the latest code, report issues, or contribute to the project.  
-  [https://github.com/PLACEHOLDER/hivex](https://github.com/PLACEHOLDER/hivex)
+  [https://github.com/nicoware-dev/hivex](https://github.com/nicoware-dev/hivex)
 
 - **Support & Contributions:**  
   Find out how you can contribute or get support by checking out our Contributing guide and opening an issue on GitHub.

@@ -96,7 +96,7 @@ function Home() {
                                     <Button
                                         size="lg"
                                         variant="outline"
-                                        onClick={() => handleExternalLink('https://PLACEHOLDER.gitbook.io')}
+                                        onClick={() => handleExternalLink('https://hivex.gitbook.io')}
                                         className="border-[#27272A] hover:bg-[#7f00ff]/10 hover:border-[#7f00ff]/50 text-white w-full sm:w-auto"
                                     >
                                         Learn More
@@ -480,7 +480,7 @@ function Home() {
                             <h4 className="text-sm font-semibold text-foreground text-center">Social</h4>
                             <div className="flex flex-col items-center gap-4 mt-4">
                                 <a
-                                    href="https://t.me/+hivexcommunity"
+                                    href="https://t.me/+Ja6g8ge6T9thNTdh"
                                     className="w-6 h-6 flex items-center justify-center"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -488,7 +488,7 @@ function Home() {
                                     <img src={telegramIcon} alt="Telegram" className="w-full h-full opacity-60 hover:opacity-100 transition-opacity" />
                                 </a>
                                 <a
-                                    href="https://discord.gg/hivex"
+                                    href="https://discord.gg/bTRhbRFbzc"
                                     className="w-6 h-6 flex items-center justify-center"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -496,7 +496,7 @@ function Home() {
                                     <img src={discordIcon} alt="Discord" className="w-full h-full opacity-60 hover:opacity-100 transition-opacity" />
                                 </a>
                                 <a
-                                    href="https://github.com/hivex-dev/hivex"
+                                    href="https://github.com/nicoware-dev/hivex"
                                     className="w-6 h-6 flex items-center justify-center"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -504,7 +504,7 @@ function Home() {
                                     <img src={githubIcon} alt="GitHub" className="w-full h-full opacity-60 hover:opacity-100 transition-opacity" />
                                 </a>
                                 <a
-                                    href="https://linktr.ee/HiveX"
+                                    href="https://linktr.ee/HiveX_AI"
                                     className="w-6 h-6 flex items-center justify-center"
                                     target="_blank"
                                     rel="noopener noreferrer"

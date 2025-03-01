@@ -8,19 +8,19 @@
   <h3>Revolutionizing MultiversX DeFi with AI-Powered Agent Swarms</h3>
   <p>Simplify your MultiversX DeFi experience with the power of Multi-Agent Systems (MAS)</p>
     <p align="center">
-    <a href="https://discord.gg/PLACEHOLDER">
+    <a href="https://discord.gg/bTRhbRFbzc">
       <img src="https://img.shields.io/badge/Discord-Join%20Us-blue?style=for-the-badge&logo=discord" alt="Discord" />
     </a>
-    <a href="https://x.com/PLACEHOLDER">
+    <a href="https://x.com/HiveXagent">
       <img src="https://img.shields.io/badge/X-Follow%20Us-blue?style=for-the-badge&logo=x" alt="X" />
     </a>
-    <a href="https://youtu.be/PLACEHOLDER">
+    <a href="https://youtu.be/NzlK-cFtw7I">
       <img src="https://img.shields.io/badge/YouTube-Demo%20Video-red?style=for-the-badge&logo=youtube" alt="Demo Video" />
     </a>
-    <a href="https://linktr.ee/PLACEHOLDER">
+    <a href="https://linktr.ee/HiveX_AI">
       <img src="https://img.shields.io/badge/Linktree-Visit%20Us-green?style=for-the-badge&logo=linktree" alt="Linktree" />
     </a>
-    <a href="https://hivex.vercel.app/">
+    <a href="https://hivex-ruby.vercel.app/">
       <img src="https://img.shields.io/badge/Website-Visit%20App-purple?style=for-the-badge&logo=vercel" alt="Website" />
     </a>
     <a href="https://hivex.gitbook.io">
@@ -486,10 +486,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <div align="center">
   <p>Built with ❤️ by the HiveX team</p>
   <p>
-    <a href="https://discord.gg/PLACEHOLDER">
+    <a href="https://discord.gg/bTRhbRFbzc">
       <img src="https://img.shields.io/badge/Discord-Join-7289DA?style=for-the-badge&logo=discord" alt="Discord" />
     </a>
-    <a href="https://x.com/PLACEHOLDER">
+    <a href="https://x.com/HiveXagent">
       <img src="https://img.shields.io/badge/X-Follow%20Us-blue?style=for-the-badge&logo=twitter" alt="X" />
     </a>
   </p>
