@@ -86,7 +86,7 @@ function Home() {
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                     <Button
                                         size="lg"
-                                        onClick={() => handleExternalLink('https://t.me/PLACEHOLDER')}
+                                        onClick={() => handleExternalLink('https://t.me/hivexdemo_bot')}
                                         style={{ backgroundColor: '#7f00ff', color: 'white' }}
                                         className="hover:bg-[#7f00ff]/90 flex items-center gap-2 w-full sm:w-auto"
                                     >

@@ -11,10 +11,10 @@ import telegram from "../assets/logos-ext/telegram.svg";
 import elizaos from "../assets/logos-ext/elizaos.svg";
 import n8n from "../assets/logos-ext/n8n.svg";
 import x_dark from "../assets/logos-ext/x_dark.svg";
-/* import multiversx from "../assets/logos-ext/multiversx.svg";
+import multiversx from "../assets/logos-ext/multiversx.svg";
 import xexchange from "../assets/logos-ext/xexchange.svg";
 import hatom from "../assets/logos-ext/hatom.svg";
-import ashswap from "../assets/logos-ext/ashswap.svg"; */
+import ashswap from "../assets/logos-ext/ashswap.svg";
 
 const logos = [
   { id: "ai16z", src: ai16z, alt: "AI16Z" },
@@ -22,10 +22,10 @@ const logos = [
   { id: "n8n", src: n8n, alt: "n8n" },
   { id: "defillama", src: defillama, alt: "DefiLlama" },
   { id: "coingecko", src: coingecko, alt: "CoinGecko" },
-/*   { id: "multiversx", src: multiversx, alt: "MultiversX" },
+  { id: "multiversx", src: multiversx, alt: "MultiversX" },
   { id: "xexchange", src: xexchange, alt: "xExchange" },
   { id: "hatom", src: hatom, alt: "Hatom" },
-  { id: "ashswap", src: ashswap, alt: "AshSwap" }, */
+  { id: "ashswap", src: ashswap, alt: "AshSwap" },
   { id: "discord", src: discord, alt: "Discord" },
   { id: "telegram", src: telegram, alt: "Telegram" },  
   { id: "x_dark", src: x_dark, alt: "X" },
