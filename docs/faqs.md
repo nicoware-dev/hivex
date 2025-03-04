@@ -19,7 +19,7 @@ Jump into our Discord community, follow us on X (formerly Twitter), or keep an e
 While some basic familiarity with Node.js and TypeScript helps for self-hosting, don't worry! Our documentation walks you through every step of the setup process.
 
 ### How do I get started with HiveX?
-It's pretty straightforward - clone our GitHub repo, install dependencies with `pnpm`, and you're on your way. Check out our [Developer Quick Start](#developer-quick-start) for the full walkthrough.
+It's pretty straightforward - clone our GitHub repo, install dependencies with `pnpm`, and you're on your way. Check out our [Developer Quick Start](./quick-start.md) for the full walkthrough.
 
 ### What if something goes wrong?
 No worries! Start by checking our documentation, or hop into our Discord for quick help. Found a bug? Please let us know by opening an issue on GitHub.
