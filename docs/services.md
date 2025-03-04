@@ -48,7 +48,7 @@ While HiveX is free to self-host, we understand some projects need extra support
 ## Get in Touch 📬
 
 Want to discuss a custom project or need more info? Here's how to reach us:
-- **Email:** [support@hivex.io](mailto:PLACEHOLDER) *(placeholder email)*
-- **Discord:** [Join our community](https://discord.gg/PLACEHOLDER)
+- **Email:** [nicoware.dev@gmail.com](mailto:nicoware.dev@gmail.com)
+- **Discord:** [Join our community](https://discord.gg/bTRhbRFbzc)
 
 Thanks for choosing HiveX! We're excited to help you revolutionize your DeFi experience on MultiversX! 🚀

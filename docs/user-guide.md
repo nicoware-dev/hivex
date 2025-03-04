@@ -7,7 +7,7 @@ Welcome to HiveX! This guide will walk you through everything you need to know t
 ### Creating Your Account
 
 1. **Visit the HiveX Web App**
-   - Go to [https://hivex.vercel.app/](https://hivex.vercel.app/)
+   - Go to [https://hivex-ruby.vercel.app/](https://hivex-ruby.vercel.app/)
    - Click "Get Started" or "Sign Up"
 
 2. **Connect Your Wallet**
@@ -133,7 +133,7 @@ Set up custom alerts:
 
 If you run into any issues:
 - Ask our Support Agent: "@Support I need help with..."
-- Join our [Discord](https://discord.gg/PLACEHOLDER) community
+- Join our [Discord](https://discord.gg/bTRhbRFbzc) community
 - Check our [FAQs](./faqs.md) for quick answers
 
 ## Privacy and Security

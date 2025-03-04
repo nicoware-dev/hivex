@@ -127,7 +127,7 @@ Learn more about our agent system in the [agents documentation](docs/agents.md).
 - 🎨 Modern, responsive design
 - 📄 Agents Directory
 - 🤖 Chat with Agent Swarm through web interface
-- 👛 MultiversX wallet connector
+- 👛 MultiversX wallet connector (WIP)
 - 📊 Portfolio & Analytics dashboard (WIP)
 - 📝 Transaction History (TBD)
 - 🌐 Token Gating (TBD)
@@ -476,10 +476,6 @@ n8n/                       # n8n workflow configurations
 3. Commit your changes
 4. Push to the branch
 5. Create a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

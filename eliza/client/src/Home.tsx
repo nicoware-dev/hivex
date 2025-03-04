@@ -281,7 +281,7 @@ function Home() {
                                 price: "Free",
                                 description: "Unlimited. Full control over your data and agents",
                                 buttonText: "View Documentation",
-                                href: "https://github.com/hivex-dev/hivex",
+                                href: "https://github.com/nicoware-dev/hivex",
                                 featured: true
                             },
                             {
@@ -365,7 +365,7 @@ function Home() {
                                 variant="outline"
                                 size="lg"
                                 className="border-[#27272A] hover:bg-[#7f00ff]/10 hover:border-[#7f00ff]/50 hover:text-[#7f00ff] transition-all duration-300 w-full sm:w-auto"
-                                onClick={() => handleExternalLink('https://github.com/hivex-dev/hivex')}
+                                onClick={() => handleExternalLink('https://github.com/nicoware-dev/hivex')}
                             >
                                 <img src={githubIcon} alt="GitHub" className="mr-2 h-4 w-4 opacity-60 group-hover:opacity-100 transition-opacity" />
                                 Contribute on GitHub
@@ -374,7 +374,7 @@ function Home() {
                                 variant="outline"
                                 size="lg"
                                 className="border-[#27272A] hover:bg-[#7f00ff]/10 hover:border-[#7f00ff]/50 hover:text-[#7f00ff] transition-all duration-300 w-full sm:w-auto"
-                                onClick={() => handleExternalLink('https://discord.gg/hivex')}
+                                onClick={() => handleExternalLink('https://discord.gg/bTRhbRFbzc')}
                             >
                                 <img src={discordIcon} alt="Discord" className="mr-2 h-4 w-4 opacity-60 group-hover:opacity-100 transition-opacity" />
                                 Join Our Discord
@@ -458,7 +458,7 @@ function Home() {
             {/* Footer */}
             <footer className="border-t border-white/[0.08] bg-background">
                 <div className="container py-12">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         <div className="space-y-4">
                             <div className="flex flex-col items-center text-center">
                                 <div className="flex items-center gap-2">
@@ -512,13 +512,6 @@ function Home() {
                                     <img src={linktreeIcon} alt="Linktree" className="w-full h-full opacity-60 hover:opacity-100 transition-opacity" />
                                 </a>
                             </div>
-                        </div>
-                        <div className="space-y-4">
-                            <h4 className="text-sm font-semibold text-foreground">Legal</h4>
-                            <nav className="flex flex-col gap-2">
-                                <a href="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</a>
-                                <a href="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Terms of Service</a>
-                            </nav>
                         </div>
                     </div>
                     <div className="mt-12 pt-8 border-t border-white/[0.08] text-center text-sm text-muted-foreground">

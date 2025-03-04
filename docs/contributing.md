@@ -34,7 +34,7 @@ Excited to help shape HiveX? Awesome! Whether you're a coding wizard or just hav
   Help others understand your work by updating docs when needed. Clear documentation makes everyone's life easier!
 
 - **Join the Chat** 💬  
-  Got ideas? Questions? Join us on [Discord](https://discord.gg/PLACEHOLDER) - we're a friendly bunch!
+  Got ideas? Questions? Join us on [Discord](https://discord.gg/bTRhbRFbzc) - we're a friendly bunch!
 
 ## Let's Build Something Amazing! 🌟
 

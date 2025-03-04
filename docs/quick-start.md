@@ -18,7 +18,7 @@ You'll need a few things installed:
 ### 1. Grab the Code
 First, let's clone the repo and hop into the right folder:
 ```bash
-git clone https://github.com/PLACEHOLDER/hivex.git
+git clone https://github.com/nicoware-dev/hivex.git
 cd hivex
 ```
 
@@ -71,6 +71,6 @@ Take a peek around the `eliza` directory – that's where all the magic happens.
 Got questions? Our docs folder is packed with helpful info and tips.
 
 ### Join the Fun
-Need a hand or want to chat? Jump into our [Discord](https://discord.gg/PLACEHOLDER) – we're a friendly bunch!
+Need a hand or want to chat? Jump into our [Discord](https://discord.gg/bTRhbRFbzc) – we're a friendly bunch!
 
 That's it! You're all set to start your HiveX journey. Happy building! 🚀

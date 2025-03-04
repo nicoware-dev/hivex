@@ -15,7 +15,7 @@ HiveX is built to be fully self-hosted, giving you complete control over your da
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/PLACEHOLDER/hivex
+git clone https://github.com/nicoware-dev/hivex
 cd hivex/eliza
 ```
 
@@ -71,7 +71,7 @@ Your web client will be available at a local URL (usually `http://localhost:3000
 ## Support & Maintenance
 
 ### Community Support
-Need help? Join our [Discord](https://discord.gg/PLACEHOLDER) for real-time assistance and community discussions.
+Need help? Join our [Discord](https://discord.gg/bTRhbRFbzc) for real-time assistance and community discussions.
 
 ### Regular Updates
 Keep your instance up to date:

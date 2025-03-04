@@ -54,6 +54,5 @@ Let's explore how HiveX connects with key protocols and data providers in the Mu
 - Position monitoring
 - Performance analytics
 
-Need help setting up any of these integrations? Check out our [plugin documentation](plugin-hivex.md) for detailed implementation guidance.
 
-Got questions? Our [Discord](https://discord.gg/PLACEHOLDER) community is always here to help with integration support and updates!
+Got questions? Our [Discord](https://discord.gg/bTRhbRFbzc) community is always here to help with integration support and updates!

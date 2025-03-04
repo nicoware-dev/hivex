@@ -46,8 +46,8 @@ That depends on your setup. You'll need to cover your hosting costs (if using a 
 ## Contributing
 
 ### How can I help improve HiveX?
-We love community contributions! Whether it's submitting pull requests, reporting issues, or suggesting new features, check out our [Contributing Guide](#contributing) to get started.
+We love community contributions! Whether it's submitting pull requests, reporting issues, or suggesting new features, check out our [Contributing Guide](./contributing.md) to get started.
 
 ---
 
-Still have questions? Don't be shy! Reach out on our Discord or start a discussion on GitHub. We're always happy to help!
+Still have questions? Don't be shy! Reach out on our [Discord](https://discord.gg/bTRhbRFbzc) or start a discussion on GitHub. We're always happy to help!
